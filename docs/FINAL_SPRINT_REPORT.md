@@ -6,14 +6,14 @@
 
 ## สมาชิกและบทบาทใน Final Sprint
 
-บทบาทช่วงนี้เป็น Sprint ที่สี่ของการหมุนเวียน ทำให้สมาชิกทุกคนได้ทำ Planner/Architect, Coder และ Debugger/QA อย่างน้อยหนึ่งครั้งเมื่อรวม Sprint 1–3
+บทบาทช่วงนี้เป็น Sprint ที่สี่ของการหมุนเวียน โดยรพีพรรณรับหน้าที่ Planner และ Release coordinator; เมื่อรวม Sprint 1–3 สมาชิกทุกคนได้ทำ Planner/Architect, Coder และ Debugger/QA อย่างน้อยหนึ่งครั้ง
 
 | สมาชิก | บทบาท | งานรับผิดชอบ |
 |---|---|---|
-| รพีพรรณ ศรีบุญเรือง | Coder | พัฒนา SQLite backend และเชื่อม persistence |
+| รพีพรรณ ศรีบุญเรือง | Planner / Release coordinator | วางแผนงาน ตรวจ checklist และประสานการส่งมอบ |
 | สุกิจตรา โคแสงรักษา | Debugger / QA | ตรวจ SQLite tests, lint และผล GitHub Actions |
 | วิยดา มูลกัน | Coder — Sales Advisor / automation | นำเสนอ Sales Advisor และอธิบายเงื่อนไข automation |
-| สุภกร กงชา | Planner / Release coordinator | ตรวจรายการส่งและประสาน API walkthrough / Live Demo |
+| สุภกร กงชา | Coder | เตรียม API walkthrough และสนับสนุน Live Demo |
 
 ## 1. สิ่งส่งมอบ
 

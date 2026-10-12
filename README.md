@@ -16,10 +16,10 @@
 
 | สมาชิก | รหัสนักศึกษา | Sprint 1 | Sprint 2 | Sprint 3 | Final Sprint |
 |---|---|---|---|---|---|
-| นางสาวรพีพรรณ ศรีบุญเรือง | 663380359-8 | Planner / เอกสาร | Coder — Domain Models และ persistence | Debugger / QA — API และ error cases | Coder — SQLite backend และ integration |
+| นางสาวรพีพรรณ ศรีบุญเรือง | 663380359-8 | Planner / เอกสาร | Coder — Domain Models และ persistence | Debugger / QA — API และ error cases | Planner / Release coordinator — checklist และประสานการส่งมอบ |
 | นางสาวสุกิจตรา โคแสงรักษา | 663380577-8 | Coder | Planner / Architect — วางแผน models และ schema | Coder — API client และ integration | Debugger / QA — SQLite tests, lint และ CI |
 | นางสาววิยดา มูลกัน | 663380573-6 | Debugger / QA | Coder — business logic | Planner / Architect — integration plan และ demo | Coder — Sales Advisor / automation |
-| นายสุภกร กงชา | 633021103-2 | Coder | Debugger / QA — persistence และ service tests | Coder — CLI/API walkthrough | Planner / Release coordinator — checklist และประสาน live demo |
+| นายสุภกร กงชา | 633021103-2 | Coder | Debugger / QA — persistence และ service tests | Coder — CLI/API walkthrough | Coder — API walkthrough และ live demo support |
 
 สมาชิกแต่ละคนมีบทบาทครบทั้งสามประเภทเมื่อพิจารณาตลอดสี่ช่วงงาน โดย Coder มีสองคนต่อ Sprint เพื่อรองรับปริมาณงานพัฒนา
 
