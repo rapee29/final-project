@@ -48,3 +48,7 @@ class InsufficientPaymentError(CoffeePOSError):
 
 class DataFileError(CoffeePOSError):
     """Raised when a data file cannot be read or written."""
+
+
+class APIError(CoffeePOSError):
+    """Raised when the Coffee POS HTTP API cannot complete a request."""

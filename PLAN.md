@@ -33,13 +33,18 @@ coffee-pos/
 ├── main.py                      # จุดเริ่มโปรแกรม
 ├── coffee_pos/
 │   ├── exceptions.py            # Custom Exceptions
+│   ├── api/                     # requests client + local mock HTTP API
 │   ├── models/                  # Drink, Member, CartItem, Order, Quote, DailySummary
 │   ├── data_access/             # JSONManager, JSONRepository
 │   ├── services/shop_service.py # ShopService + build_service()
 │   └── ui/cli.py                # CoffeeCLI
-├── tests/                       # unittest (56 tests)
+├── tests/                       # unittest + API + automation tests
+├── .github/workflows/ci.yml    # flake8 + unittest
+├── api_demo.py                 # GET/POST API walkthrough
 ├── data/                        # menu.json, members.json, orders.json (สร้างอัตโนมัติ)
-├── docs/SPRINT2-3_REPORT.md     # Test Log + Wow!/Whoops!
+├── docs/SPRINT1_REPORT.md       # Sprint 1: CLI foundation
+├── docs/SPRINT2_REPORT.md       # Sprint 2: Back-End and persistence
+├── docs/SPRINT3_REPORT.md       # Sprint 3: integration and QA
 └── PLAN.md
 ```
 
@@ -189,7 +194,7 @@ classDiagram
 - [x] พิมพ์ `cancel` ที่ prompt ใดก็ได้ → ยกเลิกรายการและกลับเมนู
 
 **End-to-End DoD (Sprint 3):** เมนู CLI ทุกข้อเรียก `ShopService` โดยตรง และ
-`python -m unittest discover` ผ่านทั้งหมด (56/56)
+`python -m unittest discover -s tests -v` ผ่านทั้งหมด
 
 ## 6. การจัดการ State และ Data Consistency (Sprint 3)
 
@@ -209,7 +214,7 @@ classDiagram
 | เงิน | `float` ปัดทศนิยม 2 ตำแหน่ง | `Decimal` | ราคาเป็นจำนวนเต็มบาท + ส่วนลด 10% ปัดทุกขั้น; ถ้าต้องรองรับสตางค์/ภาษีจริงควรย้ายไป `Decimal` |
 | Design Pattern | Repository, Service Layer, Dependency Injection (`ShopService` รับ repo/clock, `CoffeeCLI` รับ input/output) | เรียกไฟล์ตรงจาก UI | ทดสอบได้ด้วย input จำลองและนาฬิกาปลอม |
 
-## 8. ประวัติ Refactor (Sprint 1 → Sprint 2–3)
+## 8. ประวัติ Refactor (Sprint 1 → Sprint 2 → Sprint 3)
 
 | Sprint 1 (ไฟล์เดียว, procedural) | Sprint 2–3 | เหตุผล |
 |---|---|---|
@@ -220,7 +225,41 @@ classDiagram
 | `float(input())` รับ `inf` ได้ (เงินทอน = inf) | `require_number()` ปฏิเสธ `nan`/`inf` | แก้บั๊ก validation |
 | Exit เป็นเมนู 3 | เมนู 1–2 คงเดิม, เพิ่ม 3–5, Exit = `0` | เพิ่มฟีเจอร์ Sprint 2 |
 
-## 9. แนวทางต่อยอด (สำหรับ Final Sprint)
+## 9. Final Term Requirements: API, CI/CD และ Automation
 
-GitHub Actions (flake8 + `unittest`), เปลี่ยน storage เป็น SQLite โดยเขียน repository ตัวใหม่
-โดยไม่แตะ `ShopService`, ฟีเจอร์ AI/Automation เช่นสรุปยอดขายอัตโนมัติหรือแนะนำเมนูขายดี
+### API ที่เลือก
+
+ใช้ **self-made local mock API สำหรับ Coffee POS** ที่ `coffee_pos/api/server.py` โดยเลือกวิธีนี้เพื่อให้ GET/POST อยู่ในโดเมนร้านกาแฟ ทดสอบซ้ำได้ และไม่ต้องพึ่ง API key หรือเครือข่ายภายนอก
+
+| Method | Endpoint | พฤติกรรม | การทดสอบ |
+|---|---|---|---|
+| GET | `/api/menu` | คืนรายการเมนูจาก `ShopService` | ตรวจ JSON และจำนวนเมนู |
+| GET | `/api/orders` | คืนประวัติออเดอร์ที่บันทึกแล้ว | ตรวจว่าหลัง POST อ่านรายการกลับได้ |
+| POST | `/api/orders` | ตรวจ JSON, สร้าง cart, คิดเงินและบันทึกผ่าน `ShopService` | payload ปกติ, ผิดรูปแบบ, เงินไม่พอ, menu/order not found |
+
+### แผนงานราย Sprint
+
+| Sprint | งานและหลักฐานที่ควรส่ง | สถานะในโค้ดปัจจุบัน |
+|---|---|---|
+| Sprint 1 — Foundation | บันทึก API readiness check ใน `PLAN.md`; กำหนด endpoints, request/response schema, Definition of Done และกรณี error ก่อนลงมือ | ข้อกำหนดเดิมเน้น CLI; เพิ่มสัญญา API ในเอกสารนี้ย้อนหลัง |
+| Sprint 2 — Back-End | สร้าง API server/client, เชื่อม GET/POST กับ `ShopService`, persistence ผ่าน JSON และทดสอบ valid/invalid payload กับ HTTP errors | มี `coffee_pos/api/`, `requests`, API tests และ `api_demo.py` |
+| Sprint 3 — Integration | สาธิต GET menu → POST order → GET order; จัดการ timeout/HTTP/JSON errors; แสดง automation จากยอดขาย และทดสอบ end-to-end | มี API walkthrough, client error handling และ Sales Advisor ในสรุปยอด |
+| Final Sprint | GitHub Actions รัน lint + tests, ตรวจ workflow ผ่าน GitHub, เตรียม live demo และบันทึกผลจริง | มี `.github/workflows/ci.yml`; ต้องยืนยันผล run บน GitHub ก่อนส่ง |
+
+### Automation / Sales Advisor
+
+`coffee_pos/services/sales_advisor.py` ใช้ยอดขายจริงจาก `DailySummary` เพื่อแนะนำเมนูขายดี หรือแนะนำโปรโมตเมนูประจำวันเมื่อยังไม่มีออเดอร์ เป็น automation แบบกฎที่อธิบายได้ ไม่อ้างว่าเป็นโมเดล generative AI
+
+### Checklist ก่อนส่ง
+
+- [ ] ติดตั้งด้วย `python -m pip install -r requirements.txt`
+- [ ] รัน `python api_demo.py` และบันทึกผล GET/POST สำหรับการสาธิต
+- [ ] รัน `python -m unittest discover -s tests -v` ในเครื่อง
+- [ ] รัน `flake8 coffee_pos tests main.py api_demo.py` และแก้ข้อผิดพลาด
+- [ ] ตรวจว่า GitHub Actions ผ่านจริง แล้วแนบลิงก์/ภาพผล run ในรายงาน
+- [ ] เติมชื่อผู้รับผิดชอบจริงในตารางบทบาท README
+- [ ] เตรียม live demo: CRUD, persistence หลังเปิดใหม่, search/filter/sort, invalid input, API errors, CI และ sales advice
+
+## 10. แนวทางต่อยอด
+
+เปลี่ยน storage เป็น SQLite โดยเขียน repository ตัวใหม่โดยไม่แตะ `ShopService`; หากต้องการ AI จริงในอนาคต ค่อยเพิ่มโมเดลแนะนำสินค้าและเปรียบเทียบกับ Sales Advisor แบบกฎ

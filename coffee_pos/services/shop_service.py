@@ -11,8 +11,7 @@ from typing import Callable, Iterable, List, Optional, Union
 
 from coffee_pos.data_access import JSONManager, JSONRepository
 from coffee_pos.exceptions import (DuplicateError, EmptyCartError,
-                                   InsufficientPaymentError, NotFoundError,
-                                   ValidationError)
+                                   InsufficientPaymentError, ValidationError)
 from coffee_pos.models import CartItem, DailySummary, Drink, Member, Order, Quote
 from coffee_pos.models.member import normalize_phone
 from coffee_pos.models.options import (MAX_QUANTITY, MILK_OPTIONS, SIZE_OPTIONS,

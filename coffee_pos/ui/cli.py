@@ -16,6 +16,7 @@ from coffee_pos.models.options import (MAX_QUANTITY, MILK_OPTIONS, SIZE_OPTIONS,
                                        SWEETNESS_LEVELS)
 from coffee_pos.models.validators import require_number
 from coffee_pos.services import ShopService
+from coffee_pos.services.sales_advisor import make_sales_advice
 
 WIDTH = 45
 CANCEL_WORD = "cancel"
@@ -257,6 +258,7 @@ class CoffeeCLI:
         self._print(f"Total Discounts    : ฿{summary.discounts:.2f}")
         self._print(f"Total Revenue      : ฿{summary.revenue:.2f}")
         self._print(f"Best Seller        : {summary.top_drink} ({summary.top_drink_cups} cups)")
+        self._print(f"Sales Advisor      : {make_sales_advice(summary)}")
         self._line()
 
     # ================================================================ menu admin

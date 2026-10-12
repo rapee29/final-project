@@ -1,2 +1,2 @@
-# No third-party packages are required. The project uses only the Python
-# standard library (json, dataclasses, unittest, pathlib, ...).
+requests>=2.31,<3
+flake8>=7,<8

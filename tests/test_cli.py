@@ -39,6 +39,7 @@ class MainMenuTests(CLITestCase):
     def test_eof_and_ctrl_c_exit_gracefully(self):
         out, _ = self.run_cli()  # no input at all
         self.assertIn("Have a great day", out)
+
         def ctrl_c(prompt=""):
             raise KeyboardInterrupt
 
