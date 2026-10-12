@@ -8,10 +8,10 @@
 
 ## บทบาทที่สุ่มได้ใน Sprint 2
 
-- **Planner / Architect:** สุกิจตรา โคแสงรักษา — วางแผน Domain Models และ schema
-- **Coder:** รพีพรรณ ศรีบุญเรือง — Domain Models และ persistence
+- **Planner / Architect:** สุภกร กงชา — วางแผน persistence และ service
+- **Coder:** สุกิจตรา โคแสงรักษา — Domain Models และ schema
 - **Coder:** วิยดา มูลกัน — Business Logic และ algorithms
-- **Debugger / QA:** สุภกร กงชา — ทดสอบ persistence และ service
+- **Debugger / QA:** รพีพรรณ ศรีบุญเรือง — ตรวจ models และ persistence
 
 ## 1. สรุปความก้าวหน้าของงาน
 

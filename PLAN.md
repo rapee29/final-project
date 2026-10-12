@@ -236,12 +236,12 @@ Production tables: `drinks(drink_id, name, price)`, `members(phone, name, discou
 
 | สมาชิก | Sprint 1 | Sprint 2 | Sprint 3 | Final Sprint |
 |---|---|---|---|---|
-| รพีพรรณ ศรีบุญเรือง | Planner / เอกสาร | Coder — Domain Models และ persistence | Debugger / QA — API และ error cases | Planner / Release coordinator — checklist และประสานการส่งมอบ |
-| สุกิจตรา โคแสงรักษา | Coder | Planner / Architect — วางแผน models และ schema | Coder — API client และ integration | Debugger / QA — SQLite tests, lint และ CI |
-| วิยดา มูลกัน | Debugger / QA | Coder — business logic | Planner / Architect — integration plan และ demo | Coder — Sales Advisor / automation |
-| สุภกร กงชา | Coder | Debugger / QA — persistence และ service tests | Coder — CLI/API walkthrough | Coder — API walkthrough และ live demo support |
+| รพีพรรณ ศรีบุญเรือง | Coder — พัฒนา CLI | Debugger / QA — ตรวจ models และ persistence | Coder — API และ error handling | Planner / Release coordinator — checklist และประสานการส่งมอบ |
+| สุกิจตรา โคแสงรักษา | Planner / วางแผน CLI | Coder — Domain Models และ schema | Debugger / QA — ตรวจ API client และ integration | Coder — SQLite tests, lint และ CI fixes |
+| วิยดา มูลกัน | Debugger / QA — ทดสอบ CLI | Coder — Business Logic และ algorithms | Planner / Architect — integration plan และ demo | Coder — Sales Advisor / automation |
+| สุภกร กงชา | Coder — พัฒนาเมนูและ checkout | Planner / Architect — วางแผน persistence และ service | Coder — CLI/API walkthrough | Debugger / QA — ตรวจ release และ live demo |
 
-ตรวจการหมุนเวียนแล้ว สมาชิกแต่ละคนได้รับ Planner/Architect, Coder และ Debugger/QA อย่างน้อยหนึ่งครั้งตลอด Sprint 1–Final; แต่ละ Sprint มี Planner 1 คน, Coder 2 คน และ Debugger/QA 1 คน
+ตรวจการหมุนเวียนแล้ว สมาชิกทุกคนได้รับ Planner/Architect 1 รอบ, Coder 2 รอบ และ Debugger/QA 1 รอบพอดีตลอด Sprint 1–Final; แต่ละ Sprint มี Planner 1 คน, Coder 2 คน และ Debugger/QA 1 คน
 
 ### API ที่เลือก
 
