@@ -21,7 +21,6 @@
 | นางสาววิยดา มูลกัน | 663380573-6 | Debugger / QA — ทดสอบ CLI | Coder — Business Logic และ algorithms | Planner / Architect — integration plan และ demo | Coder — Sales Advisor / automation |
 | นายสุภกร กงชา | 633021103-2 | Coder — พัฒนาเมนูและ checkout | Planner / Architect — วางแผน persistence และ service | Coder — CLI/API walkthrough | Debugger / QA — ตรวจ release และ live demo |
 
-สมาชิกแต่ละคนทำ Planner/Architect 1 รอบ, Coder 2 รอบ และ Debugger/QA 1 รอบพอดี โดย Coder มีสองคนต่อ Sprint เพื่อรองรับปริมาณงานพัฒนา
 
 ## ฟีเจอร์
 
