@@ -1,7 +1,7 @@
 # PLAN.md — Group15 Express Coffee (Smart POS Coffee Terminal)
 
-> รายวิชา CP352301 Script Programming · Final Project · อัปเดตสำหรับ **Sprint 2–3**
-> สมาชิก: รพีพรรณ ศรีบุญเรือง · สุกิจตรา โคแสงรักษา · วิยดา มูลกัน · สุภกร กงชา (บทบาทสุ่มและหมุนเวียนตามตาราง Sprint 2–3 ด้านล่าง)
+> รายวิชา CP352301 Script Programming · Final Project · อัปเดตถึง **Final Sprint**
+> สมาชิก: รพีพรรณ ศรีบุญเรือง · สุกิจตรา โคแสงรักษา · วิยดา มูลกัน · สุภกร กงชา (Sprint 2–3 สุ่มและหมุนเวียน; Final Sprint แบ่งตามงานส่งมอบ)
 
 ## 1. ปัญหาและคุณค่า
 
@@ -22,7 +22,7 @@
 │  coffee_pos/models/*  (Domain Models + validation)          │
 ├─────────────────────────────────────────────────────────────┤
 │ Data Access Layer   coffee_pos/data_access/                 │  File I/O, กู้ไฟล์เสีย,
-│  JSONManager (ไฟล์)  ·  JSONRepository (รายการใน RAM)        │  เขียนไฟล์ทุกครั้งที่ข้อมูลเปลี่ยน
+│  SQLiteDatabase · SQLiteRepository (production)                │  JSONRepository สำหรับ fallback / migration
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -35,16 +35,19 @@ coffee-pos/
 │   ├── exceptions.py            # Custom Exceptions
 │   ├── api/                     # requests client + local mock HTTP API
 │   ├── models/                  # Drink, Member, CartItem, Order, Quote, DailySummary
-│   ├── data_access/             # JSONManager, JSONRepository
+│   ├── data_access/             # SQLiteDatabase, SQLiteRepository, JSON fallback
 │   ├── services/shop_service.py # ShopService + build_service()
 │   └── ui/cli.py                # CoffeeCLI
 ├── tests/                       # unittest + API + automation tests
 ├── .github/workflows/ci.yml    # flake8 + unittest
 ├── api_demo.py                 # GET/POST API walkthrough
-├── data/                        # menu.json, members.json, orders.json (สร้างอัตโนมัติ)
+├── web_app.py                  # จุดเริ่มต้นเว็บ POS
+├── web/                        # หน้าเว็บ POS (HTML, CSS, JavaScript)
+├── data/                        # coffee_pos.sqlite3; JSON legacy จาก Sprint 2–3 (ถ้ามี)
 ├── docs/SPRINT1_REPORT.md       # Sprint 1: CLI foundation
 ├── docs/SPRINT2_REPORT.md       # Sprint 2: Back-End and persistence
 ├── docs/SPRINT3_REPORT.md       # Sprint 3: integration and QA
+├── docs/FINAL_SPRINT_REPORT.md  # Final Sprint: CI/CD and handoff
 └── PLAN.md
 ```
 
@@ -150,7 +153,9 @@ classDiagram
     CoffeeCLI --> ShopService : calls
 ```
 
-## 4. Data Schema (JSON)
+## 4. Data Schema
+
+Production tables: `drinks(drink_id, name, price)`, `members(phone, name, discount_rate)` และ `orders(order_id, timestamp, total, payload)`. `payload` เก็บรายละเอียดรายการสินค้าในออเดอร์เป็น JSON เพื่อรักษาข้อมูลที่ซ้อนกัน ส่วนไฟล์ JSON ด้านล่างเป็นรูปแบบ legacy ที่ระบบนำเข้าได้เมื่อ table ปลายทางยังว่าง
 
 **data/menu.json**
 ```json
@@ -207,7 +212,7 @@ classDiagram
 
 | เรื่อง | ที่เลือก | ทางเลือกอื่น | เหตุผล |
 |---|---|---|---|
-| ที่เก็บข้อมูล | JSON | CSV / SQLite | ออเดอร์มีรายการซ้อนหลายบรรทัด (nested) JSON เก็บตรงๆ ได้ CSV ต้องแยกตาราง; SQLite เหมาะกว่าถ้าข้อมูลหลักหมื่นแถวขึ้นไป แต่เกินความจำเป็นของร้านเดียว |
+| ที่เก็บข้อมูล | SQLite สำหรับ production; JSON สำหรับ fallback และ migration | CSV / MySQL | SQLite เป็นฐานข้อมูลเชิงสัมพันธ์แบบไฟล์ ไม่ต้องพึ่ง database server; รายละเอียดรายการในออเดอร์เก็บเป็น JSON |
 | จังหวะบันทึก | เขียนทันทีทุกการเปลี่ยน | บันทึกตอนออกโปรแกรม | ไฟดับ/โปรแกรมค้างข้อมูลไม่หาย; แลกกับเขียนไฟล์บ่อยขึ้น (วัดแล้ว 300 รายการ ≈ 0.26 วินาที) |
 | การเรียงลำดับ | `sorted()` (Timsort) ด้วย key | เขียน bubble/merge sort เอง | เสถียร, O(n log n), วัดจริง 1,006 รายการเรียง 0.22 ms |
 | Domain model | `@dataclass` + validate ใน `__post_init__` | dict ธรรมดา | ข้อมูลไม่ถูกต้องเข้าระบบไม่ได้ตั้งแต่ต้นทาง |
@@ -219,7 +224,7 @@ classDiagram
 | Sprint 1 (ไฟล์เดียว, procedural) | Sprint 2–3 | เหตุผล |
 |---|---|---|
 | `MENU`, `MEMBERS` เป็น dict ฮาร์ดโค้ด | `Drink`, `Member` + `menu.json`, `members.json` | แก้ไขเมนู/สมาชิกได้โดยไม่แก้โค้ด |
-| `sales_history` เป็น list ใน RAM (ปิดโปรแกรมแล้วหาย) | `Order` + `orders.json` | ข้อมูลยอดขายคงอยู่ |
+| `sales_history` เป็น list ใน RAM (ปิดโปรแกรมแล้วหาย) | `Order` + SQLite `orders` table | ข้อมูลยอดขายคงอยู่ในฐานข้อมูล |
 | `get_customization()` / `take_order()` / `checkout()` ปนทั้ง input, คิดเงิน, พิมพ์ | UI → `ShopService.build_cart_item()/price_cart()/checkout()` | แยก Presentation / Business Logic |
 | qty ผิด → `continue` ทิ้งตัวเลือกขนาด/นมที่เลือกไว้ | ถามเฉพาะ qty ใหม่ | แก้บั๊ก UX |
 | `float(input())` รับ `inf` ได้ (เงินทอน = inf) | `require_number()` ปฏิเสธ `nan`/`inf` | แก้บั๊ก validation |
@@ -227,16 +232,16 @@ classDiagram
 
 ## 9. Final Term Requirements: API, CI/CD และ Automation
 
-### ตารางสุ่มบทบาท Sprint 2–3
+### ตารางบทบาททีม Sprint 2–3 และ Final Sprint
 
-| สมาชิก | Sprint 2 | Sprint 3 |
-|---|---|---|
-| รพีพรรณ ศรีบุญเรือง | Planner / Architect | Coder — API client และ integration |
-| สุกิจตรา โคแสงรักษา | Coder — models และ persistence | Debugger / QA — API และ error cases |
-| วิยดา มูลกัน | Coder — business logic | Planner / Architect — integration plan และ demo |
-| สุภกร กงชา | Debugger / QA — persistence และ service tests | Coder — CLI/API walkthrough |
+| สมาชิก | Sprint 2 | Sprint 3 | Final Sprint |
+|---|---|---|---|
+| รพีพรรณ ศรีบุญเรือง | Planner / Architect | Coder — API client และ integration | Planner / Release coordinator — สรุปเอกสารและตรวจรายการส่ง |
+| สุกิจตรา โคแสงรักษา | Coder — models และ persistence | Debugger / QA — API และ error cases | Debugger / QA — ตรวจ tests, lint และ CI |
+| วิยดา มูลกัน | Coder — business logic | Planner / Architect — integration plan และ demo | Coder — Sales Advisor / automation |
+| สุภกร กงชา | Debugger / QA — persistence และ service tests | Coder — CLI/API walkthrough | Coder / Presenter — API walkthrough และเตรียม live demo |
 
-สุ่มแบบมีเงื่อนไข: แต่ละ Sprint มี Planner 1 คน, Coder 2 คน, Debugger/QA 1 คน และสมาชิกแต่ละคนเปลี่ยนบทบาทระหว่าง Sprint 2 กับ Sprint 3
+สุ่มแบบมีเงื่อนไขเฉพาะ Sprint 2–3: แต่ละ Sprint มี Planner 1 คน, Coder 2 คน, Debugger/QA 1 คน และสมาชิกแต่ละคนเปลี่ยนบทบาทระหว่างสอง Sprint นั้น ส่วน Final Sprint ใช้การแบ่งผู้รับผิดชอบตามงานส่งมอบ
 
 ### API ที่เลือก
 
@@ -255,7 +260,7 @@ classDiagram
 | Sprint 1 — Foundation | บันทึก API readiness check ใน `PLAN.md`; กำหนด endpoints, request/response schema, Definition of Done และกรณี error ก่อนลงมือ | ข้อกำหนดเดิมเน้น CLI; เพิ่มสัญญา API ในเอกสารนี้ย้อนหลัง |
 | Sprint 2 — Back-End | สร้าง API server/client, เชื่อม GET/POST กับ `ShopService`, persistence ผ่าน JSON และทดสอบ valid/invalid payload กับ HTTP errors | มี `coffee_pos/api/`, `requests`, API tests และ `api_demo.py` |
 | Sprint 3 — Integration | สาธิต GET menu → POST order → GET order; จัดการ timeout/HTTP/JSON errors; แสดง automation จากยอดขาย และทดสอบ end-to-end | มี API walkthrough, client error handling และ Sales Advisor ในสรุปยอด |
-| Final Sprint | GitHub Actions รัน lint + tests, ตรวจ workflow ผ่าน GitHub, เตรียม live demo และบันทึกผลจริง | มี `.github/workflows/ci.yml`; ต้องยืนยันผล run บน GitHub ก่อนส่ง |
+| Final Sprint | GitHub Actions รัน lint + tests, เพิ่มหน้าเว็บ POS และเชื่อม persistence | หน้าเว็บ/API ใช้ SQLite โดย production; สร้างไฟล์ฐานข้อมูลอัตโนมัติ |
 
 ### Automation / Sales Advisor
 
@@ -265,14 +270,14 @@ classDiagram
 
 - [x] ติดตั้งด้วย `python -m pip install -r requirements.txt`
 - [x] รัน `python api_demo.py` และบันทึกผล GET/POST สำหรับการสาธิต
-- [x] รัน `python -m unittest discover -s tests -v` ในเครื่อง (62 tests)
+- [x] รัน `python -m unittest discover -s tests -v` ในเครื่องหลังเปลี่ยนเป็น SQLite (66 tests)
 - [x] รัน `flake8 coffee_pos tests main.py api_demo.py` และแก้ข้อผิดพลาด
-- [x] ตรวจว่า GitHub Actions ผ่านจริง แล้วแนบลิงก์ run ในรายงาน
-- [x] ระบุชื่อผู้รับผิดชอบในตารางบทบาท README และรายงาน Sprint 2–3
-- [ ] เตรียม live demo: CRUD, persistence หลังเปิดใหม่, search/filter/sort, invalid input, API errors, CI และ sales advice
+- [x] ตรวจว่า GitHub Actions เคยผ่านจริง แล้วแนบลิงก์ run ในรายงาน (run ที่อ้างถึงเป็น commit ก่อนการเปลี่ยน SQLite; local revision ล่าสุดยังไม่ได้ push)
+- [x] ระบุชื่อผู้รับผิดชอบในตารางบทบาท README, PLAN และรายงาน Final Sprint
+- [ ] ซ้อม live demo กับสมาชิก: CRUD, persistence หลังเปิดใหม่, search/filter/sort, invalid input, API errors, CI และ sales advice
 
 รายงาน Final Sprint และลำดับสาธิตอยู่ใน [`docs/FINAL_SPRINT_REPORT.md`](docs/FINAL_SPRINT_REPORT.md)
 
 ## 10. แนวทางต่อยอด
 
-เปลี่ยน storage เป็น SQLite โดยเขียน repository ตัวใหม่โดยไม่แตะ `ShopService`; หากต้องการ AI จริงในอนาคต ค่อยเพิ่มโมเดลแนะนำสินค้าและเปรียบเทียบกับ Sales Advisor แบบกฎ
+หากต้องการ AI จริงในอนาคต ค่อยเพิ่มโมเดลแนะนำสินค้าและเปรียบเทียบกับ Sales Advisor แบบกฎ

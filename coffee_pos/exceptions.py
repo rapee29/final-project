@@ -50,5 +50,9 @@ class DataFileError(CoffeePOSError):
     """Raised when a data file cannot be read or written."""
 
 
+class DatabaseError(CoffeePOSError):
+    """Raised when the configured database cannot be reached or updated."""
+
+
 class APIError(CoffeePOSError):
     """Raised when the Coffee POS HTTP API cannot complete a request."""

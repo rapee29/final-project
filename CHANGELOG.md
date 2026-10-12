@@ -1,8 +1,10 @@
 # Changelog
 
-ประวัติการเปลี่ยนแปลงของ Group15 Express Coffee — Smart POS เรียงจากเวอร์ชันใหม่ไปเก่า
+ประวัติการเปลี่ยนแปลงของ Group15 Express Coffee — Smart POS เรียงจากเวอร์ชันใหม่ไปเก่า ใช้รูปแบบ Semantic Versioning โดยเพิ่มเลข minor ตาม milestone ของแต่ละ Sprint และกำหนด `v1.0.0` เป็นรุ่นส่งงานฉบับสมบูรณ์
 
-## [Final Term Requirements] - 2026-10-12
+## [v1.0.0] - 2026-10-12
+
+รุ่นส่งมอบ Final Project: API, CI/CD, Automation และเอกสารประกอบครบ
 
 ### Added
 - เพิ่ม local mock HTTP API สำหรับ GET เมนู/ออเดอร์ และ POST ออเดอร์ พร้อม client ที่ใช้ `requests`
@@ -10,9 +12,17 @@
 - เพิ่ม GitHub Actions CI สำหรับ flake8 และ unittest
 - เพิ่ม Sales Advisor อัตโนมัติจากสรุปยอดขายรายวัน
 - แยกรายงาน Sprint 1, Sprint 2 และ Sprint 3
-- เพิ่มรายงาน Final Sprint พร้อมผล CI, API demo และ presentation runbook
+- เพิ่มรายงาน Final Sprint พร้อมผล CI, API demo, presentation runbook และบทบาทสมาชิกครบทุกคน
+- ปรับ README และ PLAN ให้แสดงผู้รับผิดชอบ Final Sprint; แจกแจงบทบาท Sprint 1 ในรายงาน
+- เพิ่ม `notebooks/Sourcecode.ipynb` เป็นทางเข้าใช้งานเวอร์ชันปัจจุบัน พร้อม mapping จากโค้ดต้นแบบไปยังโมดูลที่แยกชั้นแล้ว
+- เพิ่มหน้าเว็บ POS ที่เชื่อม API สำหรับสั่งซื้อ ชำระเงิน ดูใบเสร็จ และประวัติออเดอร์
+- แก้ asset path และเพิ่มคำแนะนำเมื่อเปิด HTML โดยตรงแทนการเปิดผ่านเว็บเซิร์ฟเวอร์
+- เปลี่ยน storage หลักของ CLI และเว็บเป็น SQLite พร้อมสร้าง schema อัตโนมัติและนำเข้าข้อมูล JSON เดิมใน transaction
+- เปลี่ยนจาก MySQL เป็น SQLite ซึ่งใช้ไลบรารีมาตรฐานของ Python และไม่ต้องติดตั้ง database server
 
-## [Sprint 3 — Full-Stack Integration] - 2026-10-02
+## [v0.3.0] - 2026-10-02
+
+Sprint 3 — Full-Stack Integration
 
 ### Added
 - เชื่อมเมนู CLI เข้ากับ `ShopService` สำหรับสั่งซื้อ จัดการเมนู/สมาชิก และดูประวัติการขาย
@@ -22,7 +32,9 @@
 - จัดการ State ให้ข้อมูลในหน่วยความจำสอดคล้องกับไฟล์ด้วย write-through และ rollback เมื่อบันทึกไม่สำเร็จ
 - ปรับปรุงการจัดการข้อผิดพลาดระหว่างใช้งานและการกู้คืนข้อมูล
 
-## [Sprint 2 — Back-End] - 2026-09-25
+## [v0.2.0] - 2026-09-25
+
+Sprint 2 — Back-End
 
 ### Added
 - เพิ่ม Domain Models สำหรับเครื่องดื่ม สมาชิก รายการในตะกร้า และออเดอร์ พร้อม validation
@@ -36,7 +48,9 @@
 - สำรองและกู้คืนไฟล์เมื่อข้อมูล JSON เสีย พร้อมจัดการระเบียนที่ไม่ถูกต้อง
 - ปรับปรุงการตรวจอินพุต การชำระเงิน การยกเลิกรายการ และการออกจากโปรแกรม
 
-## [Sprint 1] - 2026-09-18
+## [v0.1.0] - 2026-09-18
+
+Sprint 1 — CLI Foundation
 
 ### Added
 - สร้าง CLI สำหรับแสดงเมนูและรับออเดอร์เครื่องดื่ม

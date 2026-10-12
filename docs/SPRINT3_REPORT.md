@@ -31,7 +31,7 @@
 
 ## 2. ผลการทดสอบและประกันคุณภาพ
 
-รัน `python -m unittest discover -s tests -v` ได้ **62 tests — OK** (ชุดเดิม 56 รายการ และเพิ่ม API 4 รายการกับ Sales Advisor 2 รายการ) กรณีต่อไปนี้เน้นการเชื่อมระบบและพฤติกรรมจาก CLI
+ผล ณ การสรุป Sprint 3 คือ `python -m unittest discover -s tests -v` ผ่าน **62 tests — OK** (ชุดเดิม 56 รายการ และเพิ่ม API 4 รายการกับ Sales Advisor 2 รายการ); หลังเพิ่ม SQLite integration coverage ผลปัจจุบันอยู่ใน [Final Sprint](FINAL_SPRINT_REPORT.md)
 
 | รหัส | สถานการณ์ | ผลที่คาดหวัง | ผลที่บันทึก | สถานะ |
 |---|---|---|---|---|
@@ -73,7 +73,9 @@
 - สถาปัตยกรรม, UML และ Definition of Done: [`PLAN.md`](../PLAN.md)
 - CI workflow: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml); สรุปผลอยู่ใน [รายงาน Final Sprint](FINAL_SPRINT_REPORT.md)
 
-## 6. ผลการตรวจในเครื่องก่อนส่ง
+## 6. ผลการตรวจในเครื่อง ณ ช่วง Sprint 3
+
+ตัวเลขในส่วนนี้เป็น snapshot ก่อนเพิ่ม SQLite; ผลล่าสุดหลังเปลี่ยนฐานข้อมูลอยู่ใน [รายงาน Final Sprint](FINAL_SPRINT_REPORT.md)
 
 - `python -m unittest discover -s tests -v` — **62 tests — OK**
 - `flake8 coffee_pos tests main.py api_demo.py` — **ผ่าน**

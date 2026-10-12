@@ -6,11 +6,14 @@ Layer). It never prints, so it can be unit-tested without a terminal.
 
 from collections import Counter
 from datetime import date, datetime
+import json
+import os
 from pathlib import Path
 from typing import Callable, Iterable, List, Optional, Union
 
-from coffee_pos.data_access import JSONManager, JSONRepository
-from coffee_pos.exceptions import (DuplicateError, EmptyCartError,
+from coffee_pos.data_access import (JSONManager, JSONRepository, SQLiteDatabase,
+                                    SQLiteRepository)
+from coffee_pos.exceptions import (CoffeePOSError, DatabaseError, DuplicateError, EmptyCartError,
                                    InsufficientPaymentError, ValidationError)
 from coffee_pos.models import CartItem, DailySummary, Drink, Member, Order, Quote
 from coffee_pos.models.member import normalize_phone
@@ -252,9 +255,31 @@ class ShopService:
 
 
 def build_service(data_dir=None,
-                  clock: Callable[[], datetime] = datetime.now) -> ShopService:
-    """Wire the three layers together using JSON files in ``data_dir``."""
+                  clock: Callable[[], datetime] = datetime.now,
+                  storage=None) -> ShopService:
+    """Build the service; production defaults to SQLite, temp data dirs use JSON."""
     folder = Path(data_dir) if data_dir else Path(__file__).resolve().parents[2] / "data"
+    from coffee_pos.data_access.sqlite_database import load_project_env
+    load_project_env()
+    backend = storage or (
+        "json" if data_dir is not None
+        else os.getenv("COFFEE_POS_STORAGE", "sqlite")
+    )
+    backend = backend.strip().lower()
+    # Transition cleanly when an ignored .env still contains the previous setting.
+    if backend == "mysql":
+        backend = "sqlite"
+    if backend == "sqlite":
+        database = SQLiteDatabase()
+        drinks = SQLiteRepository(database, "Drink", Drink, "drink_id")
+        members = SQLiteRepository(database, "Member", Member, "phone")
+        orders = SQLiteRepository(database, "Order", Order, "order_id")
+        _migrate_legacy_json(drinks, Drink, folder / "menu.json", _default_drinks)
+        _migrate_legacy_json(members, Member, folder / "members.json", _default_members)
+        _migrate_legacy_json(orders, Order, folder / "orders.json", list)
+        return ShopService(drinks, members, orders, clock)
+    if backend != "json":
+        raise ValidationError("COFFEE_POS_STORAGE must be either 'sqlite' or 'json'.")
     drinks = JSONRepository(JSONManager(folder / "menu.json", _default_drinks),
                             Drink, "drink_id", "Drink")
     members = JSONRepository(JSONManager(folder / "members.json", _default_members),
@@ -262,3 +287,31 @@ def build_service(data_dir=None,
     orders = JSONRepository(JSONManager(folder / "orders.json", list),
                             Order, "order_id", "Order")
     return ShopService(drinks, members, orders, clock)
+
+
+def _migrate_legacy_json(repository, model_cls, path, default_factory):
+    """Copy a legacy JSON collection into an empty SQLite table, once."""
+    if len(repository):
+        return
+    if path.exists():
+        try:
+            records = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError, UnicodeDecodeError) as exc:
+            raise DatabaseError(f"Cannot migrate legacy data from {path.name}: {exc}") from exc
+        if not isinstance(records, list):
+            raise DatabaseError(f"Cannot migrate {path.name}: expected a JSON list.")
+    else:
+        records = default_factory()
+    items = []
+    skipped = 0
+    for record in records:
+        try:
+            items.append(model_cls.from_dict(record))
+        except (CoffeePOSError, KeyError, TypeError, ValueError, AttributeError):
+            skipped += 1
+    imported, duplicates = repository.import_many(items)
+    skipped += duplicates
+    source = f"migrated {imported} record(s) from {path.name} to SQLite"
+    if skipped:
+        source += f"; skipped {skipped} invalid record(s)"
+    repository.notices.append(source + ".")

@@ -1,10 +1,15 @@
 """Small self-made HTTP API backed by the existing ShopService."""
 
 import json
+import mimetypes
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
 from urllib.parse import urlsplit
 
 from coffee_pos.exceptions import CoffeePOSError, NotFoundError
+from coffee_pos.services.sales_advisor import make_sales_advice
+
+WEB_ROOT = Path(__file__).resolve().parents[2] / "web"
 
 
 def create_api_server(service, host="127.0.0.1", port=0):
@@ -22,6 +27,22 @@ def create_api_server(service, host="127.0.0.1", port=0):
             self.end_headers()
             self.wfile.write(encoded)
 
+        def _send_web_file(self, relative_path):
+            root = WEB_ROOT.resolve()
+            target = (root / relative_path).resolve()
+            if not target.is_relative_to(root) or not target.is_file():
+                self._send_json(404, {"error": "Page not found."})
+                return
+            content = target.read_bytes()
+            content_type = mimetypes.guess_type(target.name)[0] or "application/octet-stream"
+            if content_type.startswith("text/") or content_type in ("application/javascript",):
+                content_type += "; charset=utf-8"
+            self.send_response(200)
+            self.send_header("Content-Type", content_type)
+            self.send_header("Content-Length", str(len(content)))
+            self.end_headers()
+            self.wfile.write(content)
+
         def _read_json(self):
             try:
                 length = int(self.headers.get("Content-Length", "0"))
@@ -36,8 +57,26 @@ def create_api_server(service, host="127.0.0.1", port=0):
 
         def do_GET(self):
             path = urlsplit(self.path).path
-            if path == "/api/menu":
+            if path == "/":
+                self._send_web_file("index.html")
+            elif path.startswith("/assets/"):
+                self._send_web_file(path.lstrip("/"))
+            elif path == "/api/menu":
                 self._send_json(200, {"items": [d.to_dict() for d in service.list_drinks()]})
+            elif path == "/api/members":
+                self._send_json(200, {"items": [m.to_dict() for m in service.list_members()]})
+            elif path == "/api/summary":
+                summary = service.daily_summary()
+                self._send_json(200, {
+                    "day": summary.day.isoformat(),
+                    "transactions": summary.transactions,
+                    "cups": summary.cups,
+                    "revenue": summary.revenue,
+                    "discounts": summary.discounts,
+                    "top_drink": summary.top_drink,
+                    "top_drink_cups": summary.top_drink_cups,
+                    "advice": make_sales_advice(summary),
+                })
             elif path == "/api/orders":
                 self._send_json(200, {"items": [o.to_dict() for o in service.list_orders()]})
             else:

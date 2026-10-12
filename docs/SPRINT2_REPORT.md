@@ -33,7 +33,7 @@
 
 ## 2. ผลการทดสอบและประกันคุณภาพ
 
-ชุดทดสอบล่าสุดผ่าน **62 tests — OK** โดยไม่มีตัวเลขแยกเฉพาะ Sprint 2 กรณีด้านล่างเกี่ยวข้องกับ models, persistence และ business logic
+ผลชุดทดสอบที่บันทึกในช่วงทำรายงาน Sprint 2 คือ **62 tests — OK** (ผลปัจจุบันหลังเพิ่ม SQLite coverage ดูใน [Final Sprint](FINAL_SPRINT_REPORT.md)) กรณีด้านล่างเกี่ยวข้องกับ models, JSON persistence และ business logic
 
 | รหัส | สถานการณ์ | ผลที่คาดหวัง | ผลที่บันทึก | สถานะ |
 |---|---|---|---|---|

@@ -4,14 +4,27 @@
 - **รายวิชา:** CP352301 Script Programming (1/2569)
 - **เป้าหมาย:** ทำให้การตรวจคุณภาพทำซ้ำได้ สาธิต API และเพิ่ม automation ที่ใช้ข้อมูลยอดขายจริง
 
+## สมาชิกและบทบาทใน Final Sprint
+
+บทบาทช่วงนี้แบ่งตามงานรวบรวม ตรวจคุณภาพ และเตรียมส่งมอบ; การสุ่มและหมุนเวียนบทบาทใช้กับ Sprint 2–3 ตามรายงานก่อนหน้า
+
+| สมาชิก | บทบาท | งานรับผิดชอบ |
+|---|---|---|
+| รพีพรรณ ศรีบุญเรือง | Planner / Release coordinator | สรุปเอกสาร ตรวจรายการส่ง และประสานการปิดงาน |
+| สุกิจตรา โคแสงรักษา | Debugger / QA | ตรวจชุดทดสอบ, lint และผล GitHub Actions |
+| วิยดา มูลกัน | Coder — Sales Advisor / automation | นำเสนอ Sales Advisor และอธิบายเงื่อนไข automation |
+| สุภกร กงชา | Coder / Presenter | เตรียม API walkthrough และลำดับ Live Demo |
+
 ## 1. สิ่งส่งมอบ
 
 | ข้อกำหนด | สิ่งที่ส่งมอบ | สถานะ |
 |---|---|---|
-| Unit tests | `unittest` ครอบคลุม models, persistence, services, CLI, API และ Sales Advisor | ผ่าน 62 tests |
-| Automated QA / lint | flake8 ใช้ `setup.cfg` และรันใน GitHub Actions | ผ่านในเครื่องและ GitHub Actions |
-| CI/CD | `.github/workflows/ci.yml` รันเมื่อ push และ pull request | ผ่าน |
-| API integration | `requests` client เรียก self-made local mock API: GET menu, GET orders, POST orders | สาธิตครบและผล POST ถูกบันทึกผ่าน `ShopService`/JSON |
+| Unit tests | `unittest` ครอบคลุม models, JSON/SQLite persistence, migration, services, CLI, API และ Sales Advisor | ผ่าน 66 tests หลังเพิ่ม SQLite coverage |
+| Automated QA / lint | flake8 ใช้ `setup.cfg` และรันใน GitHub Actions | ผ่านในเครื่องหลังเปลี่ยนเป็น SQLite |
+| CI/CD | `.github/workflows/ci.yml` รันเมื่อ push และ pull request | มี run ผ่านสำหรับ commit ที่ระบุด้านล่าง; การเปลี่ยนแปลง SQLite ชุดปัจจุบันยังเป็น local changes |
+| API integration | `requests` client เรียก self-made local mock API: GET menu, GET orders, POST orders | เว็บ production ใช้ `ShopService`/SQLite; `api_demo.py` ใช้ข้อมูลชั่วคราวแบบ JSON เพื่อไม่แตะฐานข้อมูลร้าน |
+| SQLite persistence | SQLite schema สำหรับเมนู/สมาชิก/ออเดอร์ และย้ายข้อมูล JSON เดิมแบบ transaction | backend สร้างไฟล์และตารางให้อัตโนมัติ ไม่ต้องติดตั้ง database server |
+| Web POS | หน้าเว็บ responsive เชื่อม API สำหรับเลือกเมนู ปรับสูตร ชำระเงิน ใบเสร็จ ประวัติ และคำแนะนำยอดขายรายวัน | เปิดด้วย `python3 web_app.py` ที่ `http://127.0.0.1:8000` |
 | API error handling | จัดการ timeout, HTTP status, JSON ที่ผิดรูปแบบ และ payload ที่ไม่ถูกต้อง | มี API tests |
 | AI / Automation | Sales Advisor แนะนำเมนูขายดีหรือโปรโมตเมนูเมื่อยังไม่มีออเดอร์ โดยใช้ `DailySummary` | ทำงานเป็น rule-based automation ที่อธิบายได้ |
 | Documentation | README, PLAN, CHANGELOG, LEARNINGLOG และรายงานแยก Sprint | อัปเดตแล้ว |
@@ -20,23 +33,24 @@
 
 | Method | Endpoint | ผลลัพธ์ |
 |---|---|---|
-| GET | `/api/menu` | รายการเครื่องดื่มใน JSON |
-| GET | `/api/orders` | ประวัติออเดอร์ใน JSON |
-| POST | `/api/orders` | สร้างและบันทึกออเดอร์ ส่ง JSON กลับพร้อม HTTP 201 |
+| GET | `/api/menu` | รายการเครื่องดื่มจาก SQLite ส่งกลับเป็น JSON |
+| GET | `/api/orders` | ประวัติออเดอร์จาก SQLite ส่งกลับเป็น JSON |
+| POST | `/api/orders` | สร้างและบันทึกออเดอร์ใน SQLite ส่ง JSON กลับพร้อม HTTP 201 |
 
 ใช้ local mock API ตามตัวเลือกที่ข้อกำหนดอนุญาต จึงไม่ต้องพึ่ง API key หรือ external network ระหว่างสาธิต
 
 ## 2. ผลการตรวจคุณภาพ
 
-- `python -m unittest discover -s tests -v` — **62 tests, OK**
-- `flake8 coffee_pos tests main.py api_demo.py` — **ผ่าน**
-- `python api_demo.py` — GET เมนู 6 รายการ → POST สร้างออเดอร์ #1 → GET อ่านออเดอร์กลับ 1 รายการ
-- GitHub Actions: [Coffee POS CI run](https://github.com/rapee29/final-project/actions/runs/38261179588) — **success** สำหรับ commit `df2fa2c`
+- `./.venv/bin/python -m unittest discover -s tests -v` — **66 tests, OK** (รวม SQLite migration, checkout, API และ persistence)
+- `./.venv/bin/flake8 coffee_pos tests main.py api_demo.py` — **ผ่าน**
+- SQLite integration tests ยืนยันการย้ายข้อมูล JSON, CRUD, checkout ผ่าน API, เปิด service ใหม่แล้วยังอ่านออเดอร์ได้ และไม่บันทึกออเดอร์เมื่อเงินไม่พอ
+- `./.venv/bin/python api_demo.py` — GET เมนู 6 รายการ → POST สร้างออเดอร์ #1 → GET อ่านออเดอร์กลับ 1 รายการ (ใช้ข้อมูลชั่วคราว)
+- GitHub Actions: [Coffee POS CI run](https://github.com/rapee29/final-project/actions/runs/38262283731) — **success** สำหรับ commit `6b45690`
 
 ## 3. โครงร่างนำเสนอและ Live Demo ตามเกณฑ์ 5 ส่วน
 
 1. **ปัญหา/สถาปัตยกรรม (20%)** — อธิบายปัญหาร้านกาแฟขนาดเล็กและแสดง UML/โครงสร้าง Presentation, Business Logic, Data Access
-2. **Technology Stack (10%)** — Python, `requests`, JSON, `unittest`, flake8 และ GitHub Actions พร้อมเหตุผลที่ใช้ local mock API
+2. **Technology Stack (10%)** — Python, `requests`, SQLite, JSON API, `unittest`, flake8 และ GitHub Actions พร้อมเหตุผลที่ใช้ local mock API
 3. **Live Demo และการทดสอบ (40%)** — ทำ CRUD, ปิด/เปิดโปรแกรมเพื่อยืนยัน persistence, สาธิต search/filter/sort, ป้อนค่าผิด และรัน `python api_demo.py`
 4. **ปัญหาและการ refactor (15%)** — เล่าการแก้ RAM/file consistency, rollback, validation และ edge cases จาก Sprint 1–3
 5. **DevOps และ AI/Automation (15%)** — เปิด GitHub Actions run ที่ผ่าน แล้วสาธิต Sales Advisor จากสรุปยอดขาย
@@ -45,14 +59,14 @@
 
 - Sales Advisor เป็น rule-based automation ไม่ใช่ generative AI; จัดอยู่ในทางเลือก Automation ของเกณฑ์วิชา และอธิบายเหตุผลได้จากข้อมูลยอดขาย
 - API เป็น mock API ภายในเครื่องตามตัวเลือกที่โจทย์อนุญาต ไม่ใช่ public API
-- ก่อนนำเสนอ ให้ดึง repository ล่าสุดและเปิด GitHub Actions run ที่ตรงกับ commit ล่าสุด; ลิงก์ข้างต้นเป็น run ที่ยืนยันสถานะ success แล้ว
+- GitHub Actions run ด้านล่างเป็นผลของ commit `6b45690`; การเปลี่ยนแปลง SQLite ปัจจุบันตรวจผ่านในเครื่องแล้ว แต่ยังไม่ได้ push จึงยังไม่มี CI run สำหรับ revision นี้
 
 ## 5. Definition of Done
 
-- [x] Unit tests ผ่าน 62 รายการ
+- [x] Unit tests ผ่าน 66 รายการ รวม SQLite integration coverage
 - [x] flake8 ผ่าน
 - [x] API GET/POST สาธิตครบและจัดการ error cases
 - [x] GitHub Actions CI ทำงานและมี run ที่ผ่าน
 - [x] Automation แสดงคำแนะนำจากยอดขาย
-- [x] เอกสารและบทบาททีมระบุครบ
+- [x] เอกสารและบทบาททีมระบุครบใน README, PLAN และรายงานนี้
 - [ ] ซ้อมนำเสนอและ Live Demo กับสมาชิกทุกคนก่อนวันนำเสนอ

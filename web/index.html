@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f4ee">
+  <title>Group15 Coffee — POS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#home" aria-label="Group15 Coffee home">
+        <span class="brand-mark">g<span>15</span></span>
+        <span class="brand-copy"><strong>group15</strong><small>COFFEE STUDIO</small></span>
+      </a>
+      <div class="side-label">WORKSPACE</div>
+      <nav class="nav-list" aria-label="เมนูหลัก">
+        <button class="nav-item active" data-view="shop"><span class="nav-icon">▦</span> หน้าร้าน <span class="nav-arrow">↗</span></button>
+        <button class="nav-item" data-view="orders"><span class="nav-icon">◷</span> ประวัติออเดอร์</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="open-status"><span class="status-dot"></span><span><strong>ร้านเปิดอยู่</strong><small>พร้อมรับออเดอร์</small></span></div>
+        <div class="profile"><div class="avatar">G</div><span><strong>Group15 Team</strong><small>ผู้ดูแลร้าน</small></span><span class="more">···</span></div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="breadcrumb"><span>Workspace</span><span class="crumb-slash">/</span><strong id="crumb-title">หน้าร้าน</strong></div>
+        <div class="topbar-right"><span class="today-label" id="today-label"></span><button class="icon-button" id="refresh-button" title="โหลดข้อมูลใหม่" aria-label="โหลดข้อมูลใหม่">↻</button><div class="top-avatar">G</div></div>
+      </header>
+
+      <section id="shop-view" class="view active-view">
+        <div class="welcome-row">
+          <div><p class="eyebrow">MONDAY, FRESH START</p><h1>เสิร์ฟความสุข<br><span>ทีละแก้ว</span></h1><p class="welcome-copy">เลือกเมนูโปรด ปรับสูตร แล้วส่งต่อรอยยิ้มให้ลูกค้าของคุณ</p></div>
+          <div class="hero-art" aria-hidden="true"><div class="sun"></div><div class="coffee-cup"><div class="cup-top"></div><div class="cup-body"><span>g15</span></div><div class="cup-handle"></div><div class="cup-shadow"></div></div><div class="art-leaf leaf-one"></div><div class="art-leaf leaf-two"></div><span class="spark spark-one">✳</span><span class="spark spark-two">✦</span><span class="hero-note">GOOD COFFEE<br>GOOD MOOD</span></div>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-icon mint">฿</div><div><span class="stat-label">ยอดขายวันนี้</span><strong id="stat-revenue">฿0</strong><small id="stat-revenue-note">เริ่มต้นวันใหม่ได้เลย</small></div><span class="stat-trend">↗</span></article>
+          <article class="stat-card"><div class="stat-icon peach">▤</div><div><span class="stat-label">ออเดอร์วันนี้</span><strong id="stat-orders">0</strong><small>รายการที่ชำระแล้ว</small></div><span class="stat-trend">↗</span></article>
+          <article class="stat-card"><div class="stat-icon lilac">☕</div><div><span class="stat-label">แก้วที่เสิร์ฟ</span><strong id="stat-cups">0</strong><small id="stat-top">เมนูขายดีจะแสดงที่นี่</small></div><span class="stat-trend">✦</span></article>
+        </div>
+        <div class="advice-banner"><span class="advice-spark">✦</span><div><small>DAILY SALES ADVISOR</small><p id="sales-advice">กำลังสรุปข้อมูลยอดขายของวันนี้…</p></div><span class="advice-label">SMART INSIGHT</span></div>
+
+        <div class="content-grid">
+          <section class="menu-section">
+            <div class="section-heading"><div><p class="eyebrow">MADE WITH CARE</p><h2>เมนูของเรา <span id="menu-count" class="count-pill">0</span></h2></div><label class="search-box"><span>⌕</span><input id="menu-search" type="search" placeholder="ค้นหาเมนู..." aria-label="ค้นหาเมนู"></label></div>
+            <div class="category-row"><button class="category-chip selected" data-category="all">ทั้งหมด <span id="all-count">0</span></button><button class="category-chip" data-category="coffee">กาแฟ</button><button class="category-chip" data-category="other">เครื่องดื่มอื่น</button></div>
+            <div class="menu-grid" id="menu-grid"><div class="loading-card">กำลังโหลดเมนู...</div></div>
+          </section>
+
+          <aside class="order-panel">
+            <div class="order-panel-head"><div><p class="eyebrow">YOUR COUNTER</p><h2>ออเดอร์ปัจจุบัน</h2></div><span class="order-badge" id="cart-count">0</span></div>
+            <div class="order-empty" id="cart-empty"><div class="empty-cup">☕</div><strong>ยังไม่มีรายการ</strong><span>เลือกเครื่องดื่มที่ชอบ<br>เพื่อเริ่มออเดอร์แรก</span></div>
+            <div class="cart-list" id="cart-list"></div>
+            <div class="checkout-fields" id="checkout-fields">
+              <label class="field-label" for="member-phone">สมาชิก <span>ไม่บังคับ</span></label>
+              <input id="member-phone" class="text-input" type="tel" inputmode="numeric" maxlength="10" placeholder="เบอร์โทรสมาชิก">
+              <div class="member-hint" id="member-hint">กรอกเบอร์สมาชิกเพื่อรับส่วนลด 10%</div>
+              <label class="field-label cash-label" for="cash-input">รับเงินสด <span>บาท</span></label>
+              <div class="cash-input-wrap"><span>฿</span><input id="cash-input" type="number" min="0" step="0.01" placeholder="0.00"></div>
+              <button class="exact-cash" id="exact-cash">รับเงินพอดี <span id="exact-amount">฿0.00</span></button>
+            </div>
+            <div class="totals" id="totals">
+              <div><span>ยอดรวม</span><strong id="subtotal">฿0.00</strong></div>
+              <div class="discount-row"><span>ส่วนลดสมาชิก</span><strong id="discount">− ฿0.00</strong></div>
+              <div class="grand-total"><span>ยอดชำระ</span><strong id="total">฿0.00</strong></div>
+            </div>
+            <button class="checkout-button" id="checkout-button" disabled>ชำระเงิน <span>→</span></button>
+            <p class="checkout-hint" id="checkout-hint">เพิ่มสินค้าและกรอกเงินสดก่อนชำระ</p>
+            <p class="secure-note">✦ &nbsp;ข้อมูลออเดอร์บันทึกอัตโนมัติ</p>
+          </aside>
+        </div>
+        <footer class="page-footer"><span>© 2026 Group15 Coffee Studio</span><span>ชงด้วยใจ · เสิร์ฟด้วยรอยยิ้ม</span></footer>
+      </section>
+
+      <section id="orders-view" class="view">
+        <div class="orders-title"><div><p class="eyebrow">YOUR DAILY BUSINESS</p><h1>ประวัติออเดอร์</h1><p>ทุกแก้วที่เสิร์ฟ คือช่วงเวลาดี ๆ ที่เราได้แบ่งปัน</p></div><button class="secondary-button" id="orders-refresh">↻ &nbsp;โหลดข้อมูลใหม่</button></div>
+        <div class="orders-summary" id="orders-summary"></div>
+        <div class="table-card"><div class="table-title"><div><h2>รายการล่าสุด</h2><p>ออเดอร์ที่บันทึกไว้ในระบบ</p></div><span class="live-tag"><i></i> LIVE DATA</span></div><div class="table-scroll"><table><thead><tr><th>เลขที่</th><th>วันและเวลา</th><th>ลูกค้า</th><th>รายการ</th><th>ยอดชำระ</th><th>เงินทอน</th></tr></thead><tbody id="orders-body"></tbody></table></div><div class="table-empty hidden" id="orders-empty">ยังไม่มีออเดอร์ที่บันทึกไว้</div></div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="customize-dialog" class="customize-dialog"><form method="dialog" id="customize-form"><button type="button" class="dialog-close" id="dialog-close" aria-label="ปิด">×</button><p class="eyebrow">MAKE IT YOURS</p><div class="dialog-title-row"><span class="dialog-drink-icon" id="dialog-icon">☕</span><div><h2 id="dialog-drink-name">Drink</h2><span id="dialog-drink-price" class="dialog-base-price"></span></div></div><input type="hidden" id="dialog-drink-id"><label class="field-label">ขนาดแก้ว</label><div class="option-row" id="size-options"></div><label class="field-label">ประเภทนม</label><div class="option-row milk-options" id="milk-options"></div><label class="field-label">ระดับความหวาน</label><div class="option-row sweetness-options" id="sweetness-options"></div><label class="field-label" for="dialog-qty">จำนวนแก้ว</label><div class="qty-control"><button type="button" id="qty-minus">−</button><input id="dialog-qty" type="number" min="1" max="99" value="1"><button type="button" id="qty-plus">+</button></div><button class="add-to-cart-button" id="add-to-cart" type="submit">เพิ่มลงออเดอร์ <span id="dialog-total">฿0.00</span></button></form></dialog>
+  <dialog id="receipt-dialog" class="receipt-dialog"><div class="receipt-content"><button class="dialog-close" id="receipt-close" aria-label="ปิด">×</button><div class="receipt-check">✓</div><p class="eyebrow">ORDER COMPLETE</p><h2>ขอบคุณที่อุดหนุนค่ะ</h2><p class="receipt-sub" id="receipt-order-no"></p><div class="receipt-lines" id="receipt-lines"></div><div class="receipt-money"><span>ยอดชำระ</span><strong id="receipt-paid"></strong><span>รับเงิน</span><strong id="receipt-cash"></strong><span>เงินทอน</span><strong id="receipt-change"></strong></div><button class="checkout-button receipt-done" id="receipt-done">เรียบร้อย <span>✓</span></button></div></dialog>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="assets/app.js" defer></script>
+</body>
+</html>

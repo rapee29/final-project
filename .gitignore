@@ -5,11 +5,15 @@ __pycache__/
 venv/
 .pytest_cache/
 .coverage
+.env
 
 # Runtime data (created automatically on first run; contains sales records)
 data/*.json
 data/*.bak
 data/*.tmp
+data/*.sqlite
+data/*.sqlite3
+data/*.db
 
 # Editors / OS
 .vscode/
