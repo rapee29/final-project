@@ -6,6 +6,13 @@
 - **ช่วงส่งงาน:** 25 กันยายน 2569
 - **เป้าหมาย:** สร้าง Domain Models, Business Logic Layer และ Data Access Layer
 
+## บทบาทที่สุ่มได้ใน Sprint 2
+
+- **Planner / Architect:** รพีพรรณ ศรีบุญเรือง — วางแผนสถาปัตยกรรมและ schema
+- **Coder:** สุกิจตรา โคแสงรักษา — Domain Models และ persistence
+- **Coder:** วิยดา มูลกัน — Business Logic และ algorithms
+- **Debugger / QA:** สุภกร กงชา — ทดสอบ persistence และ service
+
 ## 1. สรุปความก้าวหน้าของงาน
 
 - [x] สร้าง `Drink`, `Member`, `CartItem` และ `Order` พร้อม validation

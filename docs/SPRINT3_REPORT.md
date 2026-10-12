@@ -6,6 +6,13 @@
 - **ช่วงส่งงาน:** 2 ตุลาคม 2569
 - **เป้าหมาย:** เชื่อม CLI กับ Back-End และตรวจสอบการทำงานครบวงจร
 
+## บทบาทที่สุ่มได้ใน Sprint 3
+
+- **Planner / Architect:** วิยดา มูลกัน — วางแผน integration และ live demo
+- **Coder:** รพีพรรณ ศรีบุญเรือง — API client และ integration
+- **Coder:** สุภกร กงชา — เชื่อม CLI/API walkthrough
+- **Debugger / QA:** สุกิจตรา โคแสงรักษา — ทดสอบ API และ error cases
+
 ## 1. สรุปความก้าวหน้าของงาน
 
 - [x] เชื่อมเมนู CLI จาก Sprint 1 เข้ากับ `ShopService`

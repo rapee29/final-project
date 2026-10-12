@@ -1,7 +1,7 @@
 # PLAN.md — Group15 Express Coffee (Smart POS Coffee Terminal)
 
 > รายวิชา CP352301 Script Programming · Final Project · อัปเดตสำหรับ **Sprint 2–3**
-> สมาชิก: รพีพรรณ ศรีบุญเรือง · สุกิจตรา โคแสงรักษา · วิยดา มูลกัน · สุภกร กงชา (บทบาทหมุนเวียนตามตารางใน Sprint 2–3)
+> สมาชิก: รพีพรรณ ศรีบุญเรือง · สุกิจตรา โคแสงรักษา · วิยดา มูลกัน · สุภกร กงชา (บทบาทสุ่มและหมุนเวียนตามตาราง Sprint 2–3 ด้านล่าง)
 
 ## 1. ปัญหาและคุณค่า
 
@@ -226,6 +226,17 @@ classDiagram
 | Exit เป็นเมนู 3 | เมนู 1–2 คงเดิม, เพิ่ม 3–5, Exit = `0` | เพิ่มฟีเจอร์ Sprint 2 |
 
 ## 9. Final Term Requirements: API, CI/CD และ Automation
+
+### ตารางสุ่มบทบาท Sprint 2–3
+
+| สมาชิก | Sprint 2 | Sprint 3 |
+|---|---|---|
+| รพีพรรณ ศรีบุญเรือง | Planner / Architect | Coder — API client และ integration |
+| สุกิจตรา โคแสงรักษา | Coder — models และ persistence | Debugger / QA — API และ error cases |
+| วิยดา มูลกัน | Coder — business logic | Planner / Architect — integration plan และ demo |
+| สุภกร กงชา | Debugger / QA — persistence และ service tests | Coder — CLI/API walkthrough |
+
+สุ่มแบบมีเงื่อนไข: แต่ละ Sprint มี Planner 1 คน, Coder 2 คน, Debugger/QA 1 คน และสมาชิกแต่ละคนเปลี่ยนบทบาทระหว่าง Sprint 2 กับ Sprint 3
 
 ### API ที่เลือก
 

@@ -105,12 +105,15 @@ GitHub Actions ใน `.github/workflows/ci.yml` ติดตั้ง dependenc
 - [CHANGELOG.md](CHANGELOG.md) — ประวัติการเปลี่ยนแปลงตาม Sprint
 - [LEARNINGLOG.md](LEARNINGLOG.md) — บทเรียนที่ได้จากการพัฒนา
 
-## บทบาททีม
+## การหมุนเวียนบทบาท Sprint 2–3
 
-| บทบาทโครงงาน | ผู้รับผิดชอบ | งานที่รับผิดชอบ |
+สุ่มบทบาทโดยให้แต่ละ Sprint มี Planner/Architect 1 คน, Coder 2 คน และ Debugger/QA 1 คน และกำหนดให้ทุกคนเปลี่ยนบทบาทใน Sprint ถัดไป
+
+| สมาชิก | Sprint 2 | Sprint 3 |
 |---|---|---|
-| Project Manager / CI-CD Integrator | นางสาวรพีพรรณ ศรีบุญเรือง | วางแผน/เอกสาร และดูแล workflow CI |
-| Automated Tester & QA | นางสาววิยดา มูลกัน | ดูแล unit/API tests และตรวจคุณภาพ |
-| Core Developer(s) | นางสาวสุกิจตรา โคแสงรักษา, นายสุภกร กงชา | พัฒนา CLI, models, persistence และ API |
+| นางสาวรพีพรรณ ศรีบุญเรือง | Planner / Architect | Coder — API client และ integration |
+| นางสาวสุกิจตรา โคแสงรักษา | Coder — models และ persistence | Debugger / QA — API และ error cases |
+| นางสาววิยดา มูลกัน | Coder — business logic | Planner / Architect — integration plan และ demo |
+| นายสุภกร กงชา | Debugger / QA — persistence และ service tests | Coder — CLI/API walkthrough |
 
-การระบุบทบาทอิงจากการแบ่งหน้าที่ Sprint 1 ที่บันทึกไว้ (สมาชิก 1 จัดทำเอกสาร, สมาชิก 3 ทดสอบ, สมาชิก 2 และ 4 พัฒนา); ปรับได้หากการแบ่งงานจริงใน Sprint หลังเปลี่ยนแปลง
+บทบาท Coder มีสองคนต่อ Sprint เพื่อรองรับปริมาณงานพัฒนา; ผู้รับผิดชอบแต่ละคนสามารถแบ่งงานย่อยร่วมกันได้
