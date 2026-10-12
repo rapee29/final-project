@@ -9,9 +9,9 @@
 ## บทบาทที่สุ่มได้ใน Sprint 3
 
 - **Planner / Architect:** วิยดา มูลกัน — วางแผน integration และ live demo
-- **Coder:** รพีพรรณ ศรีบุญเรือง — API client และ integration
+- **Coder:** สุกิจตรา โคแสงรักษา — API client และ integration
 - **Coder:** สุภกร กงชา — เชื่อม CLI/API walkthrough
-- **Debugger / QA:** สุกิจตรา โคแสงรักษา — ทดสอบ API และ error cases
+- **Debugger / QA:** รพีพรรณ ศรีบุญเรือง — ทดสอบ API และ error cases
 
 ## 1. สรุปความก้าวหน้าของงาน
 

@@ -1,7 +1,7 @@
 # PLAN.md — Group15 Express Coffee (Smart POS Coffee Terminal)
 
 > รายวิชา CP352301 Script Programming · Final Project · อัปเดตถึง **Final Sprint**
-> สมาชิก: รพีพรรณ ศรีบุญเรือง · สุกิจตรา โคแสงรักษา · วิยดา มูลกัน · สุภกร กงชา (Sprint 2–3 สุ่มและหมุนเวียน; Final Sprint แบ่งตามงานส่งมอบ)
+> สมาชิก: รพีพรรณ ศรีบุญเรือง · สุกิจตรา โคแสงรักษา · วิยดา มูลกัน · สุภกร กงชา (หมุนเวียน Planner/Architect, Coder และ Debugger/QA ให้ครบทุกคนตลอด Sprint 1–Final)
 
 ## 1. ปัญหาและคุณค่า
 
@@ -232,16 +232,16 @@ Production tables: `drinks(drink_id, name, price)`, `members(phone, name, discou
 
 ## 9. Final Term Requirements: API, CI/CD และ Automation
 
-### ตารางบทบาททีม Sprint 2–3 และ Final Sprint
+### ตารางหมุนเวียนบทบาททีม Sprint 1–3 และ Final Sprint
 
-| สมาชิก | Sprint 2 | Sprint 3 | Final Sprint |
-|---|---|---|---|
-| รพีพรรณ ศรีบุญเรือง | Planner / Architect | Coder — API client และ integration | Planner / Release coordinator — สรุปเอกสารและตรวจรายการส่ง |
-| สุกิจตรา โคแสงรักษา | Coder — models และ persistence | Debugger / QA — API และ error cases | Debugger / QA — ตรวจ tests, lint และ CI |
-| วิยดา มูลกัน | Coder — business logic | Planner / Architect — integration plan และ demo | Coder — Sales Advisor / automation |
-| สุภกร กงชา | Debugger / QA — persistence และ service tests | Coder — CLI/API walkthrough | Coder / Presenter — API walkthrough และเตรียม live demo |
+| สมาชิก | Sprint 1 | Sprint 2 | Sprint 3 | Final Sprint |
+|---|---|---|---|---|
+| รพีพรรณ ศรีบุญเรือง | Planner / เอกสาร | Coder — Domain Models และ persistence | Debugger / QA — API และ error cases | Coder — SQLite backend และ integration |
+| สุกิจตรา โคแสงรักษา | Coder | Planner / Architect — วางแผน models และ schema | Coder — API client และ integration | Debugger / QA — SQLite tests, lint และ CI |
+| วิยดา มูลกัน | Debugger / QA | Coder — business logic | Planner / Architect — integration plan และ demo | Coder — Sales Advisor / automation |
+| สุภกร กงชา | Coder | Debugger / QA — persistence และ service tests | Coder — CLI/API walkthrough | Planner / Release coordinator — checklist และประสาน live demo |
 
-สุ่มแบบมีเงื่อนไขเฉพาะ Sprint 2–3: แต่ละ Sprint มี Planner 1 คน, Coder 2 คน, Debugger/QA 1 คน และสมาชิกแต่ละคนเปลี่ยนบทบาทระหว่างสอง Sprint นั้น ส่วน Final Sprint ใช้การแบ่งผู้รับผิดชอบตามงานส่งมอบ
+ตรวจการหมุนเวียนแล้ว สมาชิกแต่ละคนได้รับ Planner/Architect, Coder และ Debugger/QA อย่างน้อยหนึ่งครั้งตลอด Sprint 1–Final; แต่ละ Sprint มี Planner 1 คน, Coder 2 คน และ Debugger/QA 1 คน
 
 ### API ที่เลือก
 

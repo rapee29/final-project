@@ -12,16 +12,16 @@
 
 ## สมาชิกและบทบาท
 
-Sprint 1 ใช้การแบ่งงานเดิมของทีม ส่วน Sprint 2–3 สุ่มบทบาทให้แต่ละ Sprint มี Planner/Architect 1 คน, Coder 2 คน และ Debugger/QA 1 คน โดยทุกคนเปลี่ยนบทบาทระหว่าง Sprint 2 กับ Sprint 3 บทบาท Final Sprint แบ่งตามงานรวบรวมและตรวจส่งมอบ
+หมุนเวียนบทบาทตลอด Sprint 1, 2, 3 และ Final Sprint ให้สมาชิกทุกคนได้ทำครบทั้ง Planner/Architect, Coder และ Debugger/QA อย่างน้อยหนึ่งครั้ง ในแต่ละ Sprint แบ่งเป็น Planner 1 คน, Coder 2 คน และ Debugger/QA 1 คน
 
 | สมาชิก | รหัสนักศึกษา | Sprint 1 | Sprint 2 | Sprint 3 | Final Sprint |
 |---|---|---|---|---|---|
-| นางสาวรพีพรรณ ศรีบุญเรือง | 663380359-8 | Planner / เอกสาร | Planner / Architect | Coder — API client และ integration | Planner / Release coordinator — สรุปเอกสารและตรวจรายการส่ง |
-| นางสาวสุกิจตรา โคแสงรักษา | 663380577-8 | Coder | Coder — models และ persistence | Debugger / QA — API และ error cases | Debugger / QA — ตรวจ tests, lint และ CI |
+| นางสาวรพีพรรณ ศรีบุญเรือง | 663380359-8 | Planner / เอกสาร | Coder — Domain Models และ persistence | Debugger / QA — API และ error cases | Coder — SQLite backend และ integration |
+| นางสาวสุกิจตรา โคแสงรักษา | 663380577-8 | Coder | Planner / Architect — วางแผน models และ schema | Coder — API client และ integration | Debugger / QA — SQLite tests, lint และ CI |
 | นางสาววิยดา มูลกัน | 663380573-6 | Debugger / QA | Coder — business logic | Planner / Architect — integration plan และ demo | Coder — Sales Advisor / automation |
-| นายสุภกร กงชา | 633021103-2 | Coder | Debugger / QA — persistence และ service tests | Coder — CLI/API walkthrough | Coder / Presenter — API walkthrough และเตรียม live demo |
+| นายสุภกร กงชา | 633021103-2 | Coder | Debugger / QA — persistence และ service tests | Coder — CLI/API walkthrough | Planner / Release coordinator — checklist และประสาน live demo |
 
-ใน Sprint 2–3 มี Coder สองคนต่อ Sprint เพื่อรองรับปริมาณงานพัฒนา; ผู้รับผิดชอบสามารถแบ่งงานย่อยร่วมกันได้
+สมาชิกแต่ละคนมีบทบาทครบทั้งสามประเภทเมื่อพิจารณาตลอดสี่ช่วงงาน โดย Coder มีสองคนต่อ Sprint เพื่อรองรับปริมาณงานพัฒนา
 
 ## ฟีเจอร์
 
