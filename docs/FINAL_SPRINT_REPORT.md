@@ -21,7 +21,7 @@
 |---|---|---|
 | Unit tests | `unittest` ครอบคลุม models, JSON/SQLite persistence, migration, services, CLI, API และ Sales Advisor | ผ่าน 66 tests หลังเพิ่ม SQLite coverage |
 | Automated QA / lint | flake8 ใช้ `setup.cfg` และรันใน GitHub Actions | ผ่านในเครื่องหลังเปลี่ยนเป็น SQLite |
-| CI/CD | `.github/workflows/ci.yml` รันเมื่อ push และ pull request | มี run ผ่านสำหรับ commit ที่ระบุด้านล่าง; การเปลี่ยนแปลง SQLite ชุดปัจจุบันยังเป็น local changes |
+| CI/CD | `.github/workflows/ci.yml` รันเมื่อ push และ pull request | GitHub Actions ผ่านสำหรับ commit `6ead4ee` ซึ่งรวม SQLite และเอกสารชุดปัจจุบัน |
 | API integration | `requests` client เรียก self-made local mock API: GET menu, GET orders, POST orders | เว็บ production ใช้ `ShopService`/SQLite; `api_demo.py` ใช้ข้อมูลชั่วคราวแบบ JSON เพื่อไม่แตะฐานข้อมูลร้าน |
 | SQLite persistence | SQLite schema สำหรับเมนู/สมาชิก/ออเดอร์ และย้ายข้อมูล JSON เดิมแบบ transaction | backend สร้างไฟล์และตารางให้อัตโนมัติ ไม่ต้องติดตั้ง database server |
 | Web POS | หน้าเว็บ responsive เชื่อม API สำหรับเลือกเมนู ปรับสูตร ชำระเงิน ใบเสร็จ ประวัติ และคำแนะนำยอดขายรายวัน | เปิดด้วย `python3 web_app.py` ที่ `http://127.0.0.1:8000` |
@@ -59,14 +59,14 @@
 
 - Sales Advisor เป็น rule-based automation ไม่ใช่ generative AI; จัดอยู่ในทางเลือก Automation ของเกณฑ์วิชา และอธิบายเหตุผลได้จากข้อมูลยอดขาย
 - API เป็น mock API ภายในเครื่องตามตัวเลือกที่โจทย์อนุญาต ไม่ใช่ public API
-- GitHub Actions run ด้านล่างเป็นผลของ commit `6b45690`; การเปลี่ยนแปลง SQLite ปัจจุบันตรวจผ่านในเครื่องแล้ว แต่ยังไม่ได้ push จึงยังไม่มี CI run สำหรับ revision นี้
+- GitHub Actions: [Coffee POS CI run](https://github.com/rapee29/final-project/actions/runs/38268080645) — **success** สำหรับ commit `6ead4ee` (รวม SQLite backend, tests และเอกสารที่ส่งล่าสุด)
 
 ## 5. Definition of Done
 
 - [x] Unit tests ผ่าน 66 รายการ รวม SQLite integration coverage
 - [x] flake8 ผ่าน
 - [x] API GET/POST สาธิตครบและจัดการ error cases
-- [x] GitHub Actions CI ทำงานและมี run ที่ผ่าน
+- [x] GitHub Actions CI ผ่านสำหรับ commit `6ead4ee`
 - [x] Automation แสดงคำแนะนำจากยอดขาย
 - [x] เอกสารและบทบาททีมระบุครบใน README, PLAN และรายงานนี้
 - [ ] ซ้อมนำเสนอและ Live Demo กับสมาชิกทุกคนก่อนวันนำเสนอ

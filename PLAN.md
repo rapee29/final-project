@@ -272,7 +272,7 @@ Production tables: `drinks(drink_id, name, price)`, `members(phone, name, discou
 - [x] รัน `python api_demo.py` และบันทึกผล GET/POST สำหรับการสาธิต
 - [x] รัน `python -m unittest discover -s tests -v` ในเครื่องหลังเปลี่ยนเป็น SQLite (66 tests)
 - [x] รัน `flake8 coffee_pos tests main.py api_demo.py` และแก้ข้อผิดพลาด
-- [x] ตรวจว่า GitHub Actions เคยผ่านจริง แล้วแนบลิงก์ run ในรายงาน (run ที่อ้างถึงเป็น commit ก่อนการเปลี่ยน SQLite; local revision ล่าสุดยังไม่ได้ push)
+- [x] ตรวจว่า GitHub Actions ผ่านสำหรับ commit `6ead4ee` หลังเปลี่ยนเป็น SQLite แล้วแนบลิงก์ run ในรายงาน Final Sprint
 - [x] ระบุชื่อผู้รับผิดชอบในตารางบทบาท README, PLAN และรายงาน Final Sprint
 - [ ] ซ้อม live demo กับสมาชิก: CRUD, persistence หลังเปิดใหม่, search/filter/sort, invalid input, API errors, CI และ sales advice
 
