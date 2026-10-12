@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+
+# Runtime data (created automatically on first run; contains sales records)
+data/*.json
+data/*.bak
+data/*.tmp
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
