@@ -10,6 +10,7 @@
 - เพิ่ม GitHub Actions CI สำหรับ flake8 และ unittest
 - เพิ่ม Sales Advisor อัตโนมัติจากสรุปยอดขายรายวัน
 - แยกรายงาน Sprint 1, Sprint 2 และ Sprint 3
+- เพิ่มรายงาน Final Sprint พร้อมผล CI, API demo และ presentation runbook
 
 ## [Sprint 3 — Full-Stack Integration] - 2026-10-02
 

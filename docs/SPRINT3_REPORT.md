@@ -27,7 +27,7 @@
 - [x] API client แปลง network/timeout/HTTP/JSON errors เป็น `APIError` ให้จัดการต่อได้
 - [x] เพิ่ม Sales Advisor ในรายงานยอดขาย: ชี้เมนูขายดี หรือแนะนำโปรโมตเมนูเมื่อยังไม่มีออเดอร์
 - [x] เพิ่ม GitHub Actions ที่ติดตั้ง dependencies, รัน flake8 และ `unittest`
-- [ ] ยืนยันผลจริงจาก GitHub Actions หลัง push workflow และแนบลิงก์ run ในรายงานก่อนส่ง
+- [x] ยืนยันผลจริงจาก GitHub Actions และแนบลิงก์ run ไว้ในรายงาน Final Sprint
 
 ## 2. ผลการทดสอบและประกันคุณภาพ
 
@@ -71,11 +71,11 @@
 ## 5. เอกสารอ้างอิงภายในโครงการ
 
 - สถาปัตยกรรม, UML และ Definition of Done: [`PLAN.md`](../PLAN.md)
-- CI workflow: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml); สถานะผ่านต้องยืนยันจาก GitHub Actions หลัง push
+- CI workflow: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml); สรุปผลอยู่ใน [รายงาน Final Sprint](FINAL_SPRINT_REPORT.md)
 
 ## 6. ผลการตรวจในเครื่องก่อนส่ง
 
 - `python -m unittest discover -s tests -v` — **62 tests — OK**
 - `flake8 coffee_pos tests main.py api_demo.py` — **ผ่าน**
 - `python api_demo.py` — GET เมนู 6 รายการ, POST สร้างออเดอร์ #1, GET อ่านออเดอร์กลับ 1 รายการ
-- ขั้นที่เหลือ: push ขึ้น GitHub แล้วตรวจ run ของ GitHub Actions ให้ผ่าน
+- ขั้นที่เหลือก่อนนำเสนอ: ซ้อมลำดับ Live Demo กับสมาชิกทุกคน

@@ -263,13 +263,15 @@ classDiagram
 
 ### Checklist ก่อนส่ง
 
-- [ ] ติดตั้งด้วย `python -m pip install -r requirements.txt`
-- [ ] รัน `python api_demo.py` และบันทึกผล GET/POST สำหรับการสาธิต
-- [ ] รัน `python -m unittest discover -s tests -v` ในเครื่อง
-- [ ] รัน `flake8 coffee_pos tests main.py api_demo.py` และแก้ข้อผิดพลาด
-- [ ] ตรวจว่า GitHub Actions ผ่านจริง แล้วแนบลิงก์/ภาพผล run ในรายงาน
-- [ ] เติมชื่อผู้รับผิดชอบจริงในตารางบทบาท README
+- [x] ติดตั้งด้วย `python -m pip install -r requirements.txt`
+- [x] รัน `python api_demo.py` และบันทึกผล GET/POST สำหรับการสาธิต
+- [x] รัน `python -m unittest discover -s tests -v` ในเครื่อง (62 tests)
+- [x] รัน `flake8 coffee_pos tests main.py api_demo.py` และแก้ข้อผิดพลาด
+- [x] ตรวจว่า GitHub Actions ผ่านจริง แล้วแนบลิงก์ run ในรายงาน
+- [x] ระบุชื่อผู้รับผิดชอบในตารางบทบาท README และรายงาน Sprint 2–3
 - [ ] เตรียม live demo: CRUD, persistence หลังเปิดใหม่, search/filter/sort, invalid input, API errors, CI และ sales advice
+
+รายงาน Final Sprint และลำดับสาธิตอยู่ใน [`docs/FINAL_SPRINT_REPORT.md`](docs/FINAL_SPRINT_REPORT.md)
 
 ## 10. แนวทางต่อยอด
 

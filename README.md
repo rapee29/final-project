@@ -11,14 +11,16 @@
 
 ## สมาชิกและบทบาท
 
-| สมาชิก | รหัสนักศึกษา |
-|---|---|
-| นางสาวรพีพรรณ ศรีบุญเรือง | 663380359-8 |
-| นางสาวสุกิจตรา โคแสงรักษา | 663380577-8 |
-| นางสาววิยดา มูลกัน | 663380573-6 |
-| นายสุภกร กงชา | 633021103-2 |
+Sprint 1 ใช้การแบ่งงานเดิมของทีม ส่วน Sprint 2–3 สุ่มบทบาทให้แต่ละ Sprint มี Planner/Architect 1 คน, Coder 2 คน และ Debugger/QA 1 คน โดยทุกคนเปลี่ยนบทบาทระหว่าง Sprint 2 กับ Sprint 3
 
-ทีมหมุนเวียนบทบาท Planner / Architect, Coder และ Debugger / QA ตามงานของแต่ละ Sprint
+| สมาชิก | รหัสนักศึกษา | Sprint 1 | Sprint 2 | Sprint 3 |
+|---|---|---|---|---|
+| นางสาวรพีพรรณ ศรีบุญเรือง | 663380359-8 | Planner / เอกสาร | Planner / Architect | Coder — API client และ integration |
+| นางสาวสุกิจตรา โคแสงรักษา | 663380577-8 | Coder | Coder — models และ persistence | Debugger / QA — API และ error cases |
+| นางสาววิยดา มูลกัน | 663380573-6 | Debugger / QA | Coder — business logic | Planner / Architect — integration plan และ demo |
+| นายสุภกร กงชา | 633021103-2 | Coder | Debugger / QA — persistence และ service tests | Coder — CLI/API walkthrough |
+
+บทบาท Coder มีสองคนต่อ Sprint เพื่อรองรับปริมาณงานพัฒนา; ผู้รับผิดชอบสามารถแบ่งงานย่อยร่วมกันได้
 
 ## ฟีเจอร์
 
@@ -89,7 +91,7 @@ python3 api_demo.py
 ## ทดสอบ
 
 ```bash
-python3 -m unittest discover -s . -v
+python3 -m unittest discover -s tests -v
 ```
 
 GitHub Actions ใน `.github/workflows/ci.yml` ติดตั้ง dependencies แล้วรัน flake8 และชุดทดสอบทุกครั้งที่ push หรือเปิด Pull Request
@@ -102,18 +104,6 @@ GitHub Actions ใน `.github/workflows/ci.yml` ติดตั้ง dependenc
 - [docs/SPRINT1_REPORT.md](docs/SPRINT1_REPORT.md) — รายงานรากฐาน CLI และผลการทบทวน Sprint 1
 - [docs/SPRINT2_REPORT.md](docs/SPRINT2_REPORT.md) — รายงาน Back-End, models, JSON persistence และ business logic
 - [docs/SPRINT3_REPORT.md](docs/SPRINT3_REPORT.md) — รายงาน Full-Stack Integration, API, automation, edge cases และ CI
+- [docs/FINAL_SPRINT_REPORT.md](docs/FINAL_SPRINT_REPORT.md) — ผล CI/CD, automation และ runbook การนำเสนอ Final Sprint
 - [CHANGELOG.md](CHANGELOG.md) — ประวัติการเปลี่ยนแปลงตาม Sprint
 - [LEARNINGLOG.md](LEARNINGLOG.md) — บทเรียนที่ได้จากการพัฒนา
-
-## การหมุนเวียนบทบาท Sprint 2–3
-
-สุ่มบทบาทโดยให้แต่ละ Sprint มี Planner/Architect 1 คน, Coder 2 คน และ Debugger/QA 1 คน และกำหนดให้ทุกคนเปลี่ยนบทบาทใน Sprint ถัดไป
-
-| สมาชิก | Sprint 2 | Sprint 3 |
-|---|---|---|
-| นางสาวรพีพรรณ ศรีบุญเรือง | Planner / Architect | Coder — API client และ integration |
-| นางสาวสุกิจตรา โคแสงรักษา | Coder — models และ persistence | Debugger / QA — API และ error cases |
-| นางสาววิยดา มูลกัน | Coder — business logic | Planner / Architect — integration plan และ demo |
-| นายสุภกร กงชา | Debugger / QA — persistence และ service tests | Coder — CLI/API walkthrough |
-
-บทบาท Coder มีสองคนต่อ Sprint เพื่อรองรับปริมาณงานพัฒนา; ผู้รับผิดชอบแต่ละคนสามารถแบ่งงานย่อยร่วมกันได้

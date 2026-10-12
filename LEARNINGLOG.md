@@ -27,8 +27,7 @@
 
 ## สิ่งที่ควรพัฒนาต่อ
 
-- ยืนยัน GitHub Actions ให้ผ่านจริง และแนบผล run ในรายงาน
-- รันทดสอบ API/automation เพิ่มหลังติดตั้ง `requirements.txt` และแก้ lint ที่ CI ตรวจพบ
+- ซ้อมนำเสนอและ Live Demo กับสมาชิกทุกคนก่อนวันนำเสนอ
 - พิจารณา SQLite หากปริมาณข้อมูลและความต้องการค้นหาซับซ้อนเกินกว่าการเก็บเป็น JSON
 
 ## Final Term Requirements — API และ Automation
