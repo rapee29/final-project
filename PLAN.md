@@ -1,7 +1,7 @@
 # PLAN.md — Group15 Express Coffee (Smart POS Coffee Terminal)
 
 > รายวิชา CP352301 Script Programming · Final Project · อัปเดตสำหรับ **Sprint 2–3**
-> สมาชิก: [ชื่อ A] · [ชื่อ B] · [ชื่อ C]  (บทบาทหมุนเวียนตามตารางใน Sprint 2–3)
+> สมาชิก: รพีพรรณ ศรีบุญเรือง · สุกิจตรา โคแสงรักษา · วิยดา มูลกัน · สุภกร กงชา (บทบาทหมุนเวียนตามตารางใน Sprint 2–3)
 
 ## 1. ปัญหาและคุณค่า
 
