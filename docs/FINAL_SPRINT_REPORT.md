@@ -24,7 +24,7 @@
 | CI/CD | `.github/workflows/ci.yml` รันเมื่อ push และ pull request | GitHub Actions ผ่านสำหรับ commit `6ead4ee` ซึ่งรวม SQLite และเอกสารชุดปัจจุบัน |
 | API integration | `requests` client เรียก self-made local mock API: GET menu, GET orders, POST orders | เว็บ production ใช้ `ShopService`/SQLite; `api_demo.py` ใช้ข้อมูลชั่วคราวแบบ JSON เพื่อไม่แตะฐานข้อมูลร้าน |
 | SQLite persistence | SQLite schema สำหรับเมนู/สมาชิก/ออเดอร์ และย้ายข้อมูล JSON เดิมแบบ transaction | backend สร้างไฟล์และตารางให้อัตโนมัติ ไม่ต้องติดตั้ง database server |
-| Web POS | หน้าเว็บ responsive เชื่อม API สำหรับเลือกเมนู ปรับสูตร ชำระเงิน ใบเสร็จ ประวัติ และคำแนะนำยอดขายรายวัน | เปิดด้วย `python3 web_app.py` ที่ `http://127.0.0.1:8000` |
+| Web POS | หน้าเลือกโหมด `/`, หน้า User `/user` สำหรับเลือกเมนู/ปรับสูตร/ชำระเงิน/ใบเสร็จ และหน้า Admin `/admin` สำหรับดูยอดขายและออเดอร์ พร้อม CRUD เมนูผ่าน API; ใช้ SQLite ชุดเดียวกัน | เปิดด้วย `python3 web_app.py` ที่ `http://127.0.0.1:8000`; Admin เป็นเดโม localhost และยังไม่มี login/authorization |
 | API error handling | จัดการ timeout, HTTP status, JSON ที่ผิดรูปแบบ และ payload ที่ไม่ถูกต้อง | มี API tests |
 | AI / Automation | Sales Advisor แนะนำเมนูขายดีหรือโปรโมตเมนูเมื่อยังไม่มีออเดอร์ โดยใช้ `DailySummary` | ทำงานเป็น rule-based automation ที่อธิบายได้ |
 | Documentation | README, PLAN, CHANGELOG, LEARNINGLOG และรายงานแยก Sprint | อัปเดตแล้ว |
@@ -36,6 +36,12 @@
 | GET | `/api/menu` | รายการเครื่องดื่มจาก SQLite ส่งกลับเป็น JSON |
 | GET | `/api/orders` | ประวัติออเดอร์จาก SQLite ส่งกลับเป็น JSON |
 | POST | `/api/orders` | สร้างและบันทึกออเดอร์ใน SQLite ส่ง JSON กลับพร้อม HTTP 201 |
+| GET | `/api/admin/summary` | สรุปยอดขายและคำแนะนำ Sales Advisor สำหรับหน้า Admin |
+| GET | `/api/admin/menu` | อ่านรายการเมนูสำหรับจัดการในหน้า Admin |
+| POST | `/api/admin/menu` | เพิ่มเมนูใหม่ลง SQLite |
+| PUT | `/api/admin/menu/{id}` | แก้ไขชื่อหรือราคาของเมนู |
+| DELETE | `/api/admin/menu/{id}` | ลบเมนู |
+| GET | `/api/admin/orders` | อ่านออเดอร์สำหรับหน้า Admin |
 
 ใช้ local mock API ตามตัวเลือกที่ข้อกำหนดอนุญาต จึงไม่ต้องพึ่ง API key หรือ external network ระหว่างสาธิต
 
@@ -46,6 +52,7 @@
 - SQLite integration tests ยืนยันการย้ายข้อมูล JSON, CRUD, checkout ผ่าน API, เปิด service ใหม่แล้วยังอ่านออเดอร์ได้ และไม่บันทึกออเดอร์เมื่อเงินไม่พอ
 - `./.venv/bin/python api_demo.py` — GET เมนู 6 รายการ → POST สร้างออเดอร์ #1 → GET อ่านออเดอร์กลับ 1 รายการ (ใช้ข้อมูลชั่วคราว)
 - GitHub Actions: [Coffee POS CI run](https://github.com/rapee29/final-project/actions/runs/38262283731) — **success** สำหรับ commit `6b45690`
+- ตรวจเปิดหน้าเลือกโหมด, หน้า User และหน้า Admin ในเดโมเว็บแล้ว; ผล 66 tests ข้างต้นเป็นชุดทดสอบเดิมและยังไม่ครอบคลุม API CRUD เมนูของ Admin ที่เพิ่มภายหลัง
 
 ## 3. โครงร่างนำเสนอและ Live Demo ตามเกณฑ์ 5 ส่วน
 
@@ -59,6 +66,8 @@
 
 - Sales Advisor เป็น rule-based automation ไม่ใช่ generative AI; จัดอยู่ในทางเลือก Automation ของเกณฑ์วิชา และอธิบายเหตุผลได้จากข้อมูลยอดขาย
 - API เป็น mock API ภายในเครื่องตามตัวเลือกที่โจทย์อนุญาต ไม่ใช่ public API
+- หน้า Admin และ endpoint `/api/admin/*` เป็นเดโมในเครื่อง ไม่มี authentication/authorization; เซิร์ฟเวอร์ค่าเริ่มต้น bind เฉพาะ `127.0.0.1` และไม่ควรเปิดให้เข้าถึงจากเครือข่ายก่อนเพิ่มระบบสิทธิ์
+- API Admin CRUD เมนูยังไม่มี automated tests แยก; ควรเพิ่มก่อนนำไปใช้จริง
 - GitHub Actions: [Coffee POS CI run](https://github.com/rapee29/final-project/actions/runs/38268080645) — **success** สำหรับ commit `6ead4ee` (รวม SQLite backend, tests และเอกสารที่ส่งล่าสุด)
 
 ## 5. Definition of Done

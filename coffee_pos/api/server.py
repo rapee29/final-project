@@ -58,9 +58,33 @@ def create_api_server(service, host="127.0.0.1", port=0):
         def do_GET(self):
             path = urlsplit(self.path).path
             if path == "/":
+                self._send_web_file("portal.html")
+            elif path == "/user":
                 self._send_web_file("index.html")
+            elif path == "/admin":
+                self._send_web_file("admin.html")
             elif path.startswith("/assets/"):
                 self._send_web_file(path.lstrip("/"))
+            elif path.startswith("/api/admin/"):
+                resource = path.removeprefix("/api/admin/")
+                if resource == "summary":
+                    summary = service.daily_summary()
+                    self._send_json(200, {
+                        "day": summary.day.isoformat(),
+                        "transactions": summary.transactions,
+                        "cups": summary.cups,
+                        "revenue": summary.revenue,
+                        "discounts": summary.discounts,
+                        "top_drink": summary.top_drink,
+                        "top_drink_cups": summary.top_drink_cups,
+                        "advice": make_sales_advice(summary),
+                    })
+                elif resource == "menu":
+                    self._send_json(200, {"items": [d.to_dict() for d in service.list_drinks()]})
+                elif resource == "orders":
+                    self._send_json(200, {"items": [o.to_dict() for o in service.list_orders()]})
+                else:
+                    self._send_json(404, {"error": "Admin endpoint not found."})
             elif path == "/api/menu":
                 self._send_json(200, {"items": [d.to_dict() for d in service.list_drinks()]})
             elif path == "/api/members":
@@ -83,7 +107,16 @@ def create_api_server(service, host="127.0.0.1", port=0):
                 self._send_json(404, {"error": "Endpoint not found."})
 
         def do_POST(self):
-            if urlsplit(self.path).path != "/api/orders":
+            path = urlsplit(self.path).path
+            if path == "/api/admin/menu":
+                try:
+                    payload = self._read_json()
+                    drink = service.add_drink(payload.get("name"), payload.get("price"))
+                    self._send_json(201, {"item": drink.to_dict()})
+                except (KeyError, TypeError, ValueError, CoffeePOSError) as exc:
+                    self._send_json(400, {"error": str(exc)})
+                return
+            if path != "/api/orders":
                 self._send_json(404, {"error": "Endpoint not found."})
                 return
             try:
@@ -103,5 +136,35 @@ def create_api_server(service, host="127.0.0.1", port=0):
                 self._send_json(404, {"error": str(exc)})
             except CoffeePOSError as exc:
                 self._send_json(400, {"error": str(exc)})
+
+        def do_PUT(self):
+            path = urlsplit(self.path).path
+            prefix = "/api/admin/menu/"
+            if not path.startswith(prefix):
+                self._send_json(404, {"error": "Endpoint not found."})
+                return
+            try:
+                drink_id = int(path.removeprefix(prefix))
+                payload = self._read_json()
+                drink = service.update_drink(
+                    drink_id, name=payload.get("name"), price=payload.get("price"))
+                self._send_json(200, {"item": drink.to_dict()})
+            except (KeyError, TypeError, ValueError, CoffeePOSError) as exc:
+                status = 404 if isinstance(exc, NotFoundError) else 400
+                self._send_json(status, {"error": str(exc)})
+
+        def do_DELETE(self):
+            path = urlsplit(self.path).path
+            prefix = "/api/admin/menu/"
+            if not path.startswith(prefix):
+                self._send_json(404, {"error": "Endpoint not found."})
+                return
+            try:
+                drink_id = int(path.removeprefix(prefix))
+                drink = service.remove_drink(drink_id)
+                self._send_json(200, {"item": drink.to_dict()})
+            except (TypeError, ValueError, CoffeePOSError) as exc:
+                status = 404 if isinstance(exc, NotFoundError) else 400
+                self._send_json(status, {"error": str(exc)})
 
     return ThreadingHTTPServer((host, port), CoffeeAPIHandler)

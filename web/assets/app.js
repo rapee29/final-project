@@ -11,19 +11,11 @@ const MILK_OPTIONS = [
 const SWEETNESS = ['0%', '25%', '50%', '100%'];
 const ICONS = ['☕', '🧊', '🥛', '☕', '🍫', '🍵'];
 const ART = ['espresso', 'americano', 'latte', 'cappuccino', 'mocha', 'matcha'];
-const state = { menu: [], members: [], orders: [], summary: null, cart: [], category: 'all', selectedDrink: null, selection: { size: 'M', milkId: 1, sweetness: '50%' }, toastTimer: null };
+const state = { menu: [], members: [], cart: [], category: 'all', selectedDrink: null, selection: { size: 'M', milkId: 1, sweetness: '50%' }, toastTimer: null };
 const $ = (selector) => document.querySelector(selector);
 const money = (value) => `฿${Number(value || 0).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 
-function localDateKey(date = new Date()) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-function orderDateKey(timestamp) { return String(timestamp || '').slice(0, 10); }
-function todayOrders() { const today = localDateKey(); return state.orders.filter((order) => orderDateKey(order.timestamp) === today); }
 function showToast(message, isError = false) {
   const toast = $('#toast'); toast.textContent = message; toast.classList.toggle('error', isError); toast.classList.add('show');
   clearTimeout(state.toastTimer); state.toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
@@ -37,14 +29,13 @@ async function api(path, options = {}) {
 async function refreshData() {
   if (window.location.protocol === 'file:') {
     $('#menu-grid').innerHTML = '<div class="loading-card file-mode-notice">เปิดไฟล์ HTML โดยตรงจึงเชื่อมต่อข้อมูลไม่ได้<br><a href="http://127.0.0.1:8000/">เปิดเว็บ POS ผ่านเซิร์ฟเวอร์</a><small>หากลิงก์เปิดไม่ได้ ให้รัน <code>python3 web_app.py</code> ในโฟลเดอร์โปรเจกต์ก่อน</small></div>';
-    $('#sales-advice').textContent = 'เปิดผ่านเว็บเซิร์ฟเวอร์เพื่อดูข้อมูลยอดขาย';
     $('#checkout-hint').textContent = 'เปิดเว็บผ่าน http://127.0.0.1:8000 เพื่อเริ่มรับออเดอร์';
     return;
   }
   try {
-    const [menu, members, orders, summary] = await Promise.all([api('/api/menu'), api('/api/members'), api('/api/orders'), api('/api/summary')]);
-    state.menu = menu.items || []; state.members = members.items || []; state.orders = orders.items || []; state.summary = summary;
-    renderMenu(); renderCart(); renderHomeStats(); renderOrders();
+    const [menu, members] = await Promise.all([api('/api/menu'), api('/api/members')]);
+    state.menu = menu.items || []; state.members = members.items || [];
+    renderMenu(); renderCart();
   } catch (error) {
     showToast(`เชื่อมต่อระบบไม่ได้: ${error.message}`, true);
     $('#menu-grid').innerHTML = '<div class="loading-card">โหลดข้อมูลไม่สำเร็จ กรุณากด ↻ เพื่อลองใหม่</div>';
@@ -65,13 +56,6 @@ function renderMenu() {
     const isOther = /matcha|ชา|โกโก้|ช็อกโกแลต/i.test(drink.name);
     return `<article class="menu-card"><div class="drink-art art-${ART[index % ART.length]}"><span>${ICONS[index % ICONS.length]}</span><small class="drink-tag">${isOther ? 'SIGNATURE' : 'COFFEE'}</small></div><div class="drink-name-row"><strong class="drink-name" title="${esc(drink.name)}">${esc(drink.name)}</strong><span class="drink-price">${money(drink.price)}</span></div><p class="drink-caption">ชงสดทุกแก้ว · เลือกสูตรได้</p><button class="add-button" data-add="${Number(drink.drink_id)}">＋ &nbsp; ปรับสูตรและเพิ่ม</button></article>`;
   }).join('');
-}
-function renderHomeStats() {
-  const summary = state.summary || {};
-  $('#stat-revenue').textContent = money(summary.revenue); $('#stat-orders').textContent = Number(summary.transactions || 0).toLocaleString('th-TH'); $('#stat-cups').textContent = Number(summary.cups || 0).toLocaleString('th-TH');
-  $('#stat-revenue-note').textContent = summary.transactions ? `ส่วนลดวันนี้ ${money(summary.discounts)}` : 'เริ่มต้นวันใหม่ได้เลย';
-  $('#stat-top').textContent = summary.top_drink ? `ขายดี ${summary.top_drink} · ${summary.top_drink_cups} แก้ว` : 'เมนูขายดีจะแสดงที่นี่';
-  $('#sales-advice').textContent = summary.advice || 'กำลังสรุปข้อมูลยอดขายของวันนี้…';
 }
 function selectedMember() {
   const phone = $('#member-phone').value.trim();
@@ -126,16 +110,6 @@ function formatTimestamp(value) {
   const [day, time = ''] = String(value || '').split(' '); const [year, month, date] = day.split('-');
   return `${date || ''}/${month || ''}/${year || ''} · ${time.slice(0, 5)}`;
 }
-function renderOrders() {
-  const today = todayOrders(); const revenue = today.reduce((sum, order) => sum + Number(order.total), 0);
-  const cups = today.reduce((sum, order) => sum + (order.items || []).reduce((n, item) => n + Number(item.qty), 0), 0);
-  $('#orders-summary').innerHTML = `<div class="summary-box"><span>ยอดขายวันนี้</span><strong>${money(revenue)}</strong></div><div class="summary-box"><span>ออเดอร์วันนี้</span><strong>${today.length.toLocaleString('th-TH')} รายการ</strong></div><div class="summary-box"><span>จำนวนแก้ววันนี้</span><strong>${cups.toLocaleString('th-TH')} แก้ว</strong></div>`;
-  const orders = [...state.orders].reverse(); $('#orders-empty').classList.toggle('hidden', orders.length > 0);
-  $('#orders-body').innerHTML = orders.map((order) => {
-    const items = (order.items || []).map((item) => `${esc(item.name)} × ${item.qty}`).join(', ');
-    return `<tr><td>#${String(order.order_id).padStart(4, '0')}</td><td>${formatTimestamp(order.timestamp)}</td><td>${esc(order.member_name || 'Guest')}</td><td>${items}</td><td><strong>${money(order.total)}</strong></td><td>${money(order.change)}</td></tr>`;
-  }).join('');
-}
 async function checkout() {
   if (!state.cart.length) return;
   const phone = $('#member-phone').value.trim(); const member = selectedMember(); const cash = Number($('#cash-input').value);
@@ -147,7 +121,7 @@ async function checkout() {
     if (phone) payload.member_phone = phone;
     const result = await api('/api/orders', { method: 'POST', body: JSON.stringify(payload) });
     const order = result.order; renderReceipt(order); state.cart = []; $('#member-phone').value = ''; $('#cash-input').value = ''; renderCart();
-    const [latest, summary] = await Promise.all([api('/api/orders'), api('/api/summary')]); state.orders = latest.items || []; state.summary = summary; renderHomeStats(); renderOrders(); $('#receipt-dialog').showModal();
+    $('#receipt-dialog').showModal();
   } catch (error) { showToast(error.message, true); }
   finally { button.innerHTML = 'ชำระเงิน <span>→</span>'; renderCart(); }
 }
@@ -155,12 +129,6 @@ function renderReceipt(order) {
   $('#receipt-order-no').textContent = `ออเดอร์ #${String(order.order_id).padStart(4, '0')} · ${formatTimestamp(order.timestamp)}`;
   $('#receipt-lines').innerHTML = (order.items || []).map((item) => `<div class="receipt-line"><span>${esc(item.name)} · ${item.size} × ${item.qty}</span><strong>${money(item.total_price)}</strong></div>`).join('');
   $('#receipt-paid').textContent = money(order.total); $('#receipt-cash').textContent = money(order.cash_received); $('#receipt-change').textContent = money(order.change);
-}
-function switchView(view) {
-  const shop = view === 'shop'; $('#shop-view').classList.toggle('active-view', shop); $('#orders-view').classList.toggle('active-view', !shop);
-  document.querySelectorAll('.nav-item').forEach((item) => item.classList.toggle('active', item.dataset.view === view));
-  $('#crumb-title').textContent = shop ? 'หน้าร้าน' : 'ประวัติออเดอร์';
-  if (!shop) renderOrders();
 }
 function setTodayLabel() {
   $('#today-label').textContent = new Intl.DateTimeFormat('th-TH', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }).format(new Date());
@@ -174,7 +142,6 @@ document.addEventListener('click', (event) => {
   if (action) { const line = state.cart.find((item) => item.key === action.dataset.key); if (!line) return; if (action.dataset.cartAction === 'plus') line.qty = Math.min(99, line.qty + 1); if (action.dataset.cartAction === 'minus') line.qty -= 1; if (action.dataset.cartAction === 'remove' || line.qty < 1) state.cart = state.cart.filter((item) => item !== line); renderCart(); }
   const category = event.target.closest('[data-category]');
   if (category) { state.category = category.dataset.category; document.querySelectorAll('.category-chip').forEach((chip) => chip.classList.toggle('selected', chip === category)); renderMenu(); }
-  const nav = event.target.closest('[data-view]'); if (nav) switchView(nav.dataset.view);
 });
 $('#customize-form').addEventListener('submit', addSelectedDrink);
 $('#dialog-close').addEventListener('click', () => $('#customize-dialog').close());
@@ -184,7 +151,7 @@ $('#dialog-qty').addEventListener('input', updateDialogTotal);
 $('#member-phone').addEventListener('input', renderCart); $('#cash-input').addEventListener('input', renderCart);
 $('#exact-cash').addEventListener('click', () => { $('#cash-input').value = cartTotal().toFixed(2); renderCart(); });
 $('#checkout-button').addEventListener('click', checkout);
-$('#refresh-button').addEventListener('click', refreshData); $('#orders-refresh').addEventListener('click', refreshData);
+$('#refresh-button').addEventListener('click', refreshData);
 $('#menu-search').addEventListener('input', renderMenu);
 $('#receipt-close').addEventListener('click', () => $('#receipt-dialog').close()); $('#receipt-done').addEventListener('click', () => $('#receipt-dialog').close());
 setTodayLabel(); refreshData();

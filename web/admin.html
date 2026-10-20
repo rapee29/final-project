@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f4f5f1">
+  <title>Group15 Coffee — Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/admin.css"><script src="/assets/admin.js" defer></script>
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <a class="brand" href="/"><span class="brand-mark">g<span>15</span></span><span><strong>group15</strong><small>COFFEE STUDIO</small></span></a>
+      <p class="side-label">ADMIN WORKSPACE</p>
+      <nav><a class="nav-link active" href="#overview">▦ &nbsp; ภาพรวมร้าน</a><a class="nav-link" href="#menu-management">☕ &nbsp; จัดการเมนู</a><a class="nav-link" href="#orders">◷ &nbsp; ออเดอร์ทั้งหมด</a></nav>
+      <div class="side-bottom"><span class="admin-avatar">G</span><span><strong>ผู้ดูแลร้าน</strong><small>Admin demo</small></span><a href="/" aria-label="กลับหน้าเลือกโหมด">↗</a></div>
+    </aside>
+    <main class="admin-main">
+      <header class="admin-topbar"><div><span class="breadcrumb">Workspace /</span> <strong>Admin</strong></div><div class="top-actions"><span class="demo-badge">DEMO MODE</span><button class="refresh-button" id="refresh-button">↻ <span>รีเฟรช</span></button></div></header>
+      <section id="overview" class="page-section">
+        <div class="page-heading"><div><p class="eyebrow">STORE OVERVIEW</p><h1>ภาพรวมร้าน</h1><p>ติดตามยอดขายและการทำงานของร้านจากข้อมูลจริงในระบบ</p></div><a class="user-shortcut" href="/user">เปิดหน้าสั่งกาแฟ ↗</a></div>
+        <div class="stat-grid">
+          <article class="stat-card"><span class="stat-icon green">฿</span><div><small>ยอดขายวันนี้</small><strong id="revenue">กำลังโหลด</strong><em id="discounts">ส่วนลด ฿0.00</em></div><span class="stat-arrow">↗</span></article>
+          <article class="stat-card"><span class="stat-icon peach">▤</span><div><small>ออเดอร์วันนี้</small><strong id="transactions">—</strong><em>รายการที่ชำระแล้ว</em></div><span class="stat-arrow">↗</span></article>
+          <article class="stat-card"><span class="stat-icon lilac">☕</span><div><small>แก้วที่เสิร์ฟ</small><strong id="cups">—</strong><em id="top-drink">เมนูขายดีจะแสดงที่นี่</em></div><span class="stat-arrow">✦</span></article>
+        </div>
+        <article class="insight-card"><div class="insight-icon">✦</div><div><small>DAILY SALES ADVISOR</small><p id="advice">กำลังโหลดคำแนะนำ...</p></div><span class="insight-tag">SMART INSIGHT</span></article>
+      </section>
+      <section id="menu-management" class="page-section table-section">
+        <div class="section-heading"><div><p class="eyebrow">CATALOG</p><h2>จัดการเมนู</h2><p>เพิ่มหรือแก้ไขรายการและราคาที่แสดงในหน้าสั่งกาแฟ</p></div><button class="primary-button" id="add-menu">＋ เพิ่มเมนู</button></div>
+        <div class="table-card"><div class="table-scroll"><table><thead><tr><th>รหัส</th><th>ชื่อเมนู</th><th>ราคาพื้นฐาน</th><th>การจัดการ</th></tr></thead><tbody id="menu-body"><tr><td colspan="4" class="loading">กำลังโหลดเมนู...</td></tr></tbody></table></div></div>
+      </section>
+      <section id="orders" class="page-section table-section">
+        <div class="section-heading"><div><p class="eyebrow">RECENT ACTIVITY</p><h2>ออเดอร์ล่าสุด</h2><p>ออเดอร์ที่บันทึกไว้ในฐานข้อมูล</p></div><span id="order-count" class="count-badge">0 ออเดอร์</span></div>
+        <div class="table-card"><div class="table-scroll"><table><thead><tr><th>เลขที่</th><th>วันและเวลา</th><th>ลูกค้า</th><th>รายการ</th><th>ยอดชำระ</th><th>เงินทอน</th></tr></thead><tbody id="orders-body"><tr><td colspan="6" class="loading">กำลังโหลดออเดอร์...</td></tr></tbody></table></div><div id="orders-empty" class="empty-state hidden">ยังไม่มีออเดอร์ที่บันทึกไว้</div></div>
+      </section>
+      <footer class="admin-footer"><span>© 2026 Group15 Coffee Studio</span><span>Admin และ User ใช้ข้อมูลร้านชุดเดียวกัน</span></footer>
+    </main>
+  </div>
+  <dialog id="menu-dialog" class="menu-dialog"><form id="menu-form"><button class="close-dialog" type="button" id="close-dialog" aria-label="ปิด">×</button><p class="eyebrow">MENU CATALOG</p><h2 id="form-title">เพิ่มเมนู</h2><input id="menu-id" type="hidden"><label for="menu-name">ชื่อเมนู</label><input id="menu-name" required maxlength="80" placeholder="เช่น Caramel Latte"><label for="menu-price">ราคาพื้นฐาน (บาท)</label><input id="menu-price" required type="number" min="0.01" max="100000" step="0.01" placeholder="เช่น 85"><p id="form-error" class="form-error"></p><button class="primary-button save-button" type="submit">บันทึกเมนู</button></form></dialog>
+  <div id="toast" class="toast" role="status"></div>
+</body>
+</html>

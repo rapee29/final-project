@@ -2,6 +2,23 @@
 
 ประวัติการเปลี่ยนแปลงของ Group15 Express Coffee — Smart POS เรียงจากเวอร์ชันใหม่ไปเก่า ใช้รูปแบบ Semantic Versioning โดยเพิ่มเลข minor ตาม milestone ของแต่ละ Sprint และกำหนด `v1.0.0` เป็นรุ่นส่งงานฉบับสมบูรณ์
 
+## [v1.1.0] - 2026-10-20
+
+ปรับปรุงเดโมเว็บหลังรุ่นส่งมอบ เพื่อแยกพื้นที่ User และ Admin ให้เห็นขอบเขตการใช้งานชัดเจน
+
+### Added
+- เพิ่มหน้าเลือกโหมดที่ `/` และแยกหน้า User (`/user`) ออกจากหน้า Admin (`/admin`)
+- เพิ่ม Admin dashboard สำหรับดูยอดขายรายวัน คำแนะนำ Sales Advisor และออเดอร์ล่าสุด
+- เพิ่มการจัดการเมนูจากหน้า Admin: เพิ่ม แก้ไข และลบ ผ่าน API ที่บันทึกข้อมูลลง SQLite ชุดเดียวกับหน้า User
+- เพิ่ม API สำหรับข้อมูล Admin: `GET /api/admin/summary`, `GET /api/admin/menu`, `GET /api/admin/orders`, `POST /api/admin/menu`, `PUT /api/admin/menu/{id}` และ `DELETE /api/admin/menu/{id}`
+
+### Changed
+- แยกข้อมูลสรุปยอดขายและประวัติออเดอร์ออกจากหน้า User เพื่อให้หน้า User เน้นการสั่งกาแฟ และให้ข้อมูลร้านอยู่ในหน้า Admin
+
+### Limitations
+- Admin เป็นเดโมในเครื่อง ไม่มีระบบ login หรือ authorization; ให้ใช้บน localhost เท่านั้นจนกว่าจะเพิ่มระบบยืนยันตัวตนและกำหนดสิทธิ์
+- API จัดการเมนูของ Admin ยังไม่มี automated tests แยกสำหรับ endpoint CRUD
+
 ## [v1.0.0] - 2026-10-12
 
 รุ่นส่งมอบ Final Project: API, CI/CD, Automation และเอกสารประกอบครบ
